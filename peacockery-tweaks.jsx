@@ -7,6 +7,19 @@ function PeacockeryTweaks() {
   };
 
   const [tweaks, setTweak] = window.useTweaks(defaults);
+  const [surfaceTheme, setSurfaceTheme] = React.useState(() => {
+    if (typeof document === "undefined") return "dark";
+    return document.documentElement.getAttribute("data-theme") || "dark";
+  });
+
+  React.useEffect(() => {
+    const onTheme = (e) => {
+      const t = e && e.detail && e.detail.theme;
+      if (t === "light" || t === "dark") setSurfaceTheme(t);
+    };
+    window.addEventListener("peacockery-themechange", onTheme);
+    return () => window.removeEventListener("peacockery-themechange", onTheme);
+  }, []);
 
   React.useEffect(() => {
     document.documentElement.setAttribute("data-palette", tweaks.palette);
@@ -20,12 +33,14 @@ function PeacockeryTweaks() {
       earth: { bg:"#eeece4", bg2:"#e1ddd0", ink:"#1f3a2f", ink2:"#2e4a3c", muted:"#6e7a6c", line:"#c9c4b3", accent:"#FF6532" },
       ink:   { bg:"#0e0e0e", bg2:"#1a1916", ink:"#fafafa", ink2:"#cfc8b8", muted:"#8a8174", line:"#2a2723", accent:"#FF6532" }
     };
-    const p = palettes[tweaks.palette] || palettes.ink;
+    const paletteKey =
+      surfaceTheme === "light" && tweaks.palette === "ink" ? "crisp" : tweaks.palette;
+    const p = palettes[paletteKey] || palettes.ink;
     Object.entries(p).forEach(([k, v]) => {
       const cssKey = k === "bg2" ? "--bg-2" : k === "ink2" ? "--ink-2" : `--${k}`;
       root.setProperty(cssKey, v);
     });
-  }, [tweaks.palette, tweaks.type]);
+  }, [tweaks.palette, tweaks.type, surfaceTheme]);
 
   return (
     <window.TweaksPanel title="Tweaks" defaultPosition={{ right: 24, bottom: 24 }}>

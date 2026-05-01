@@ -21,26 +21,34 @@ function ThemeBoot() {
 }
 
 function ThemeToggle() {
-  const [theme, setTheme] = React.useState(
-    () => typeof document !== "undefined" && document.documentElement.getAttribute("data-theme") || "dark"
-  );
+  const [theme, setTheme] = React.useState(() => {
+    if (typeof document === "undefined") return "dark";
+    return document.documentElement.getAttribute("data-theme") || "dark";
+  });
   const toggle = () => {
     const next = theme === "light" ? "dark" : "light";
     setTheme(next);
     document.documentElement.setAttribute("data-theme", next);
     localStorage.setItem("peacockery-theme", next);
+    window.dispatchEvent(new CustomEvent("peacockery-themechange", { detail: { theme: next } }));
   };
+  const modeLabel = theme === "dark" ? "Dark" : "Light";
   return (
-    <button className="theme-toggle" onClick={toggle} aria-label="Toggle theme">
+    <button
+      className="theme-toggle"
+      type="button"
+      onClick={toggle}
+      aria-label={`${modeLabel} mode — switch to ${theme === "dark" ? "light" : "dark"} mode`}
+    >
       <span style={{ width: 8, height: 8, borderRadius: "50%", background: theme === "light" ? "var(--ink)" : "var(--accent)" }}></span>
-      {theme === "light" ? "Dark" : "Light"}
+      {modeLabel}
     </button>
   );
 }
 
 function Nav({ active }) {
   return (
-    <nav className="nav" style={{ backgroundColor: "rgb(14, 14, 14)" }}>
+    <nav className="nav">
       <div className="container nav-inner">
         <a href="index.html" className="nav-logo">
           Peacockery<span className="dot">.</span>
