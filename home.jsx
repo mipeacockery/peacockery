@@ -17,20 +17,20 @@ function ParticleCanvas() {
     const DAMP = 0.72;        // velocity damping
 
     let dots = [];
+    let logicalW = 0, logicalH = 0;
     const mouse = { x: -9999, y: -9999 };
 
     function buildGrid() {
-      const W = canvas.width, H = canvas.height;
-      const cols = Math.ceil(W / SPACING) + 1;
-      const rows = Math.ceil(H / SPACING) + 1;
+      const cols = Math.ceil(logicalW / SPACING) + 1;
+      const rows = Math.ceil(logicalH / SPACING) + 1;
       dots = [];
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
           dots.push({
-            ox: c * SPACING,  // rest x
-            oy: r * SPACING,  // rest y
-            dx: 0,            // displacement x
-            dy: 0,            // displacement y
+            ox: c * SPACING,
+            oy: r * SPACING,
+            dx: 0,
+            dy: 0,
             vx: 0,
             vy: 0,
           });
@@ -39,8 +39,12 @@ function ParticleCanvas() {
     }
 
     function resize() {
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
+      const dpr = window.devicePixelRatio || 1;
+      logicalW = canvas.offsetWidth;
+      logicalH = canvas.offsetHeight;
+      canvas.width = logicalW * dpr;
+      canvas.height = logicalH * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       buildGrid();
     }
 
@@ -59,8 +63,7 @@ function ParticleCanvas() {
     section.addEventListener("mouseleave", onLeave);
 
     function draw() {
-      const W = canvas.width, H = canvas.height;
-      ctx.clearRect(0, 0, W, H);
+      ctx.clearRect(0, 0, logicalW, logicalH);
 
       // detect dark theme
       const isDark = document.documentElement.getAttribute("data-theme") === "dark";
@@ -98,7 +101,7 @@ function ParticleCanvas() {
 
         const x = d.ox + d.dx;
         const y = d.oy + d.dy;
-        if (x < -SPACING || x > W + SPACING || y < -SPACING || y > H + SPACING) continue;
+        if (x < -SPACING || x > logicalW + SPACING || y < -SPACING || y > logicalH + SPACING) continue;
 
         ctx.beginPath();
         ctx.arc(x, y, DOT_R, 0, Math.PI * 2);
