@@ -9,7 +9,7 @@ function ParticleCanvas() {
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
 
-    const SPACING = 28;       // grid cell size
+    const SPACING = 16;       // grid cell size
     const DOT_R = 1.5;        // dot radius
     const PUSH_RADIUS = 100;  // mouse influence radius
     const MAX_PUSH = 22;      // max displacement in px
