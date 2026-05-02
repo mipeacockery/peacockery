@@ -9,10 +9,10 @@ function ParticleCanvas() {
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
 
-    const SPACING = 16;       // grid cell size
+    const SPACING = 12;       // grid cell size
     const DOT_R = 1.5;        // dot radius
-    const PUSH_RADIUS = 200;  // mouse influence radius
-    const MAX_PUSH = 22;      // max displacement in px
+    const PUSH_RADIUS = 400;  // mouse influence radius
+    const MAX_PUSH = 55;      // max displacement in px
     const SPRING = 0.12;      // spring-back stiffness
     const DAMP = 0.72;        // velocity damping
 
@@ -82,7 +82,7 @@ function ParticleCanvas() {
         const dist = Math.sqrt(px * px + py * py);
         if (dist < PUSH_RADIUS && dist > 0) {
           const t = 1 - dist / PUSH_RADIUS;
-          const force = t * t * MAX_PUSH * 0.06;
+          const force = t * t * MAX_PUSH * 0.18;
           d.vx += (px / dist) * force;
           d.vy += (py / dist) * force;
         }
