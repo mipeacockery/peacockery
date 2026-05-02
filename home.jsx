@@ -188,11 +188,11 @@ const SERVICES = [
 
 function Hero() {
   return (
-    <section style={{ paddingTop: 96, paddingBottom: 120, position: "relative", overflow: "hidden" }}>
+    <section className="hero" style={{ paddingTop: 96, paddingBottom: 120, position: "relative", overflow: "hidden" }}>
       <ParticleCanvas />
       <div className="container" style={{ position: "relative", zIndex: 1 }}>
         <div className="eyebrow reveal" style={{ marginBottom: 28 }}>
-          <span>Michael Peacock</span> &nbsp;·&nbsp; <span>UX &amp; Art Direction</span> &nbsp;·&nbsp; <span>Est. 2014</span>
+          <span>Michael Peacock</span> &nbsp;·&nbsp; <span>UX &amp; Art Direction</span>
         </div>
         <h1 className="display h-xxl reveal" style={{ margin: 0 }}>
           Designing brands<br />and products with<br />
@@ -200,9 +200,8 @@ function Hero() {
         </h1>
         <div className="reveal" style={{ marginTop: 56, display: "grid", gridTemplateColumns: "1fr 1.1fr", gap: 64, alignItems: "end" }}>
           <p style={{ fontSize: "1.25rem", lineHeight: 1.45, color: "var(--ink-2)", margin: 0, maxWidth: 520 }}>
-            I'm Michael — a designer working across UX, brand, and art direction.
-            Currently leading experience design at <span style={{ color: "var(--ink)" }}>TierOne</span>, and taking on
-            select consulting work under the name <span style={{ color: "var(--ink)" }}>Peacockery</span>.
+            I'm Michael, a designer working across UX, brand design, and art direction.
+            Currently leading experience design at <span style={{ color: "var(--ink)" }}>TechStack</span> and <span style={{ color: "var(--ink)" }}>TierOne</span>.
           </p>
           <div style={{ display: "flex", gap: 14, justifyContent: "flex-end", flexWrap: "wrap" }}>
             <a href="work.html" className="pill solid">See selected work <span className="arrow">↘</span></a>

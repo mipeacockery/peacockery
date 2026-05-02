@@ -2,7 +2,6 @@
    Exported to window so each page script can use them. */
 
 const NAV_LINKS = [
-  { href: "index.html", label: "Index", key: "index" },
   { href: "work.html", label: "Work", key: "work" },
   { href: "about.html", label: "About", key: "about" },
   { href: "contact.html", label: "Contact", key: "contact" },
@@ -47,10 +46,15 @@ function ThemeToggle() {
 }
 
 function Nav({ active }) {
+  const onHome = active === "index";
   return (
-    <nav className="nav">
+    <nav className={onHome ? "nav nav--home" : "nav"}>
       <div className="container nav-inner">
-        <a href="index.html" className="nav-logo">
+        <a
+          href="index.html"
+          className="nav-logo"
+          aria-current={onHome ? "page" : undefined}
+        >
           Peacockery<span className="dot">.</span>
         </a>
         <div className="nav-links">

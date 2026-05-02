@@ -74,6 +74,12 @@ button { font-family: inherit; font-size: 1em; cursor: pointer; }
   text-transform: uppercase;
   color: var(--muted);
 }
+.hero .eyebrow {
+  font-size: 13px;
+}
+[data-theme="dark"] .hero .eyebrow {
+  color: rgba(255, 255, 255, 1);
+}
 .rule { height: 1px; background: var(--line); width: 100%; }
 
 /* Display type */
@@ -304,5 +310,5 @@ button { font-family: inherit; font-size: 1em; cursor: pointer; }
 @media (max-width: 800px) {
   .footer-grid { grid-template-columns: 1fr; gap: 32px; }
   .nav-links { gap: 16px; font-size: 0.6875rem; }
-  .nav-links a:not(.active):not(.theme-toggle) { display: none; }
+  .nav:not(.nav--home) .nav-links a:not(.active):not(.theme-toggle) { display: none; }
 }
