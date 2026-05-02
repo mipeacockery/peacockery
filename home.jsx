@@ -134,6 +134,7 @@ function ParticleCanvas() {
         height: "100%",
         display: "block",
         pointerEvents: "none",
+        opacity: 0.5,
       }}
     />
   );
