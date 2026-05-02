@@ -2,40 +2,51 @@
 
 function ParticleCanvas() {
   const canvasRef = React.useRef(null);
-  const stateRef = React.useRef(null);
+  const rafRef = React.useRef(null);
 
   React.useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
 
-    const COUNT = 90;
-    const CONNECT_DIST = 140;
-    const REPEL_DIST = 100;
-    const REPEL_FORCE = 0.38;
-    const SPEED = 0.28;
+    const SPACING = 28;       // grid cell size
+    const DOT_R = 1.5;        // dot radius
+    const PUSH_RADIUS = 100;  // mouse influence radius
+    const MAX_PUSH = 22;      // max displacement in px
+    const SPRING = 0.12;      // spring-back stiffness
+    const DAMP = 0.72;        // velocity damping
 
-    function rand(a, b) { return a + Math.random() * (b - a); }
+    let dots = [];
+    const mouse = { x: -9999, y: -9999 };
+
+    function buildGrid() {
+      const W = canvas.width, H = canvas.height;
+      const cols = Math.ceil(W / SPACING) + 1;
+      const rows = Math.ceil(H / SPACING) + 1;
+      dots = [];
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          dots.push({
+            ox: c * SPACING,  // rest x
+            oy: r * SPACING,  // rest y
+            dx: 0,            // displacement x
+            dy: 0,            // displacement y
+            vx: 0,
+            vy: 0,
+          });
+        }
+      }
+    }
 
     function resize() {
       canvas.width = canvas.offsetWidth;
       canvas.height = canvas.offsetHeight;
-    }
-
-    function initParticles(w, h) {
-      return Array.from({ length: COUNT }, () => ({
-        x: rand(0, w),
-        y: rand(0, h),
-        vx: rand(-SPEED, SPEED),
-        vy: rand(-SPEED, SPEED),
-        r: rand(1.2, 2.8),
-        baseAlpha: rand(0.25, 0.7),
-      }));
+      buildGrid();
     }
 
     resize();
-    const particles = initParticles(canvas.width, canvas.height);
-    const mouse = { x: -9999, y: -9999 };
+
+    const section = canvas.parentElement;
 
     function onMove(e) {
       const rect = canvas.getBoundingClientRect();
@@ -44,11 +55,6 @@ function ParticleCanvas() {
     }
     function onLeave() { mouse.x = -9999; mouse.y = -9999; }
 
-    canvas.addEventListener("mousemove", onMove);
-    canvas.addEventListener("mouseleave", onLeave);
-
-    // also capture move from parent section (content overlaps canvas)
-    const section = canvas.parentElement;
     section.addEventListener("mousemove", onMove);
     section.addEventListener("mouseleave", onLeave);
 
@@ -56,92 +62,60 @@ function ParticleCanvas() {
       const W = canvas.width, H = canvas.height;
       ctx.clearRect(0, 0, W, H);
 
-      // update + repel
-      for (const p of particles) {
-        const dx = p.x - mouse.x, dy = p.y - mouse.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < REPEL_DIST && dist > 0) {
-          const f = (1 - dist / REPEL_DIST) * REPEL_FORCE;
-          p.vx += (dx / dist) * f;
-          p.vy += (dy / dist) * f;
-        }
-        // damping
-        p.vx *= 0.985;
-        p.vy *= 0.985;
-        // min drift
-        const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
-        if (speed < 0.06) {
-          p.vx += rand(-0.03, 0.03);
-          p.vy += rand(-0.03, 0.03);
-        }
-        p.x += p.vx;
-        p.y += p.vy;
-        // wrap
-        if (p.x < -10) p.x = W + 10;
-        if (p.x > W + 10) p.x = -10;
-        if (p.y < -10) p.y = H + 10;
-        if (p.y > H + 10) p.y = -10;
-      }
+      // detect dark theme
+      const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+      const dotColor = isDark ? "rgba(255,253,245,0.22)" : "rgba(0,0,0,0.13)";
 
-      // connections
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const a = particles[i], b = particles[j];
-          const dx = a.x - b.x, dy = a.y - b.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < CONNECT_DIST) {
-            const alpha = (1 - dist / CONNECT_DIST) * 0.18;
-            ctx.beginPath();
-            ctx.moveTo(a.x, a.y);
-            ctx.lineTo(b.x, b.y);
-            ctx.strokeStyle = `rgba(255,255,248,${alpha})`;
-            ctx.lineWidth = 0.7;
-            ctx.stroke();
-          }
+      ctx.fillStyle = dotColor;
+
+      for (const d of dots) {
+        // spring toward rest
+        const ax = -d.dx * SPRING;
+        const ay = -d.dy * SPRING;
+
+        // mouse push
+        const px = d.ox + d.dx - mouse.x;
+        const py = d.oy + d.dy - mouse.y;
+        const dist = Math.sqrt(px * px + py * py);
+        if (dist < PUSH_RADIUS && dist > 0) {
+          const t = 1 - dist / PUSH_RADIUS;
+          const force = t * t * MAX_PUSH * 0.06;
+          d.vx += (px / dist) * force;
+          d.vy += (py / dist) * force;
         }
-      }
 
-      // dots
-      for (const p of particles) {
-        // proximity glow
-        const dx = p.x - mouse.x, dy = p.y - mouse.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        const proximityBoost = dist < REPEL_DIST * 1.5
-          ? (1 - dist / (REPEL_DIST * 1.5)) * 0.5
-          : 0;
-        const alpha = Math.min(1, p.baseAlpha + proximityBoost);
+        d.vx = (d.vx + ax) * DAMP;
+        d.vy = (d.vy + ay) * DAMP;
+        d.dx += d.vx;
+        d.dy += d.vy;
 
-        // soft glow
-        const grd = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 3.5);
-        grd.addColorStop(0, `rgba(255,255,248,${alpha})`);
-        grd.addColorStop(1, "rgba(255,255,248,0)");
+        // clamp max displacement
+        const dispLen = Math.sqrt(d.dx * d.dx + d.dy * d.dy);
+        if (dispLen > MAX_PUSH) {
+          d.dx = (d.dx / dispLen) * MAX_PUSH;
+          d.dy = (d.dy / dispLen) * MAX_PUSH;
+        }
+
+        const x = d.ox + d.dx;
+        const y = d.oy + d.dy;
+        if (x < -SPACING || x > W + SPACING || y < -SPACING || y > H + SPACING) continue;
+
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r * 3.5, 0, Math.PI * 2);
-        ctx.fillStyle = grd;
-        ctx.fill();
-
-        // solid core
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255,255,248,${alpha})`;
+        ctx.arc(x, y, DOT_R, 0, Math.PI * 2);
         ctx.fill();
       }
 
-      stateRef.current = requestAnimationFrame(draw);
+      rafRef.current = requestAnimationFrame(draw);
     }
 
-    const ro = new ResizeObserver(() => {
-      resize();
-    });
+    const ro = new ResizeObserver(resize);
     ro.observe(canvas);
 
-    stateRef.current = requestAnimationFrame(draw);
+    rafRef.current = requestAnimationFrame(draw);
 
     return () => {
-      cancelAnimationFrame(stateRef.current);
+      cancelAnimationFrame(rafRef.current);
       ro.disconnect();
-      canvas.removeEventListener("mousemove", onMove);
-      canvas.removeEventListener("mouseleave", onLeave);
       section.removeEventListener("mousemove", onMove);
       section.removeEventListener("mouseleave", onLeave);
     };
@@ -157,7 +131,6 @@ function ParticleCanvas() {
         height: "100%",
         display: "block",
         pointerEvents: "none",
-        opacity: 0.85,
       }}
     />
   );
