@@ -1,5 +1,168 @@
 /* Home page */
 
+function ParticleCanvas() {
+  const canvasRef = React.useRef(null);
+  const stateRef = React.useRef(null);
+
+  React.useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+
+    const COUNT = 90;
+    const CONNECT_DIST = 140;
+    const REPEL_DIST = 100;
+    const REPEL_FORCE = 0.38;
+    const SPEED = 0.28;
+
+    function rand(a, b) { return a + Math.random() * (b - a); }
+
+    function resize() {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    }
+
+    function initParticles(w, h) {
+      return Array.from({ length: COUNT }, () => ({
+        x: rand(0, w),
+        y: rand(0, h),
+        vx: rand(-SPEED, SPEED),
+        vy: rand(-SPEED, SPEED),
+        r: rand(1.2, 2.8),
+        baseAlpha: rand(0.25, 0.7),
+      }));
+    }
+
+    resize();
+    const particles = initParticles(canvas.width, canvas.height);
+    const mouse = { x: -9999, y: -9999 };
+
+    function onMove(e) {
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+    }
+    function onLeave() { mouse.x = -9999; mouse.y = -9999; }
+
+    canvas.addEventListener("mousemove", onMove);
+    canvas.addEventListener("mouseleave", onLeave);
+
+    // also capture move from parent section (content overlaps canvas)
+    const section = canvas.parentElement;
+    section.addEventListener("mousemove", onMove);
+    section.addEventListener("mouseleave", onLeave);
+
+    function draw() {
+      const W = canvas.width, H = canvas.height;
+      ctx.clearRect(0, 0, W, H);
+
+      // update + repel
+      for (const p of particles) {
+        const dx = p.x - mouse.x, dy = p.y - mouse.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < REPEL_DIST && dist > 0) {
+          const f = (1 - dist / REPEL_DIST) * REPEL_FORCE;
+          p.vx += (dx / dist) * f;
+          p.vy += (dy / dist) * f;
+        }
+        // damping
+        p.vx *= 0.985;
+        p.vy *= 0.985;
+        // min drift
+        const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+        if (speed < 0.06) {
+          p.vx += rand(-0.03, 0.03);
+          p.vy += rand(-0.03, 0.03);
+        }
+        p.x += p.vx;
+        p.y += p.vy;
+        // wrap
+        if (p.x < -10) p.x = W + 10;
+        if (p.x > W + 10) p.x = -10;
+        if (p.y < -10) p.y = H + 10;
+        if (p.y > H + 10) p.y = -10;
+      }
+
+      // connections
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const a = particles[i], b = particles[j];
+          const dx = a.x - b.x, dy = a.y - b.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < CONNECT_DIST) {
+            const alpha = (1 - dist / CONNECT_DIST) * 0.18;
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.strokeStyle = `rgba(255,255,248,${alpha})`;
+            ctx.lineWidth = 0.7;
+            ctx.stroke();
+          }
+        }
+      }
+
+      // dots
+      for (const p of particles) {
+        // proximity glow
+        const dx = p.x - mouse.x, dy = p.y - mouse.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const proximityBoost = dist < REPEL_DIST * 1.5
+          ? (1 - dist / (REPEL_DIST * 1.5)) * 0.5
+          : 0;
+        const alpha = Math.min(1, p.baseAlpha + proximityBoost);
+
+        // soft glow
+        const grd = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 3.5);
+        grd.addColorStop(0, `rgba(255,255,248,${alpha})`);
+        grd.addColorStop(1, "rgba(255,255,248,0)");
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r * 3.5, 0, Math.PI * 2);
+        ctx.fillStyle = grd;
+        ctx.fill();
+
+        // solid core
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,248,${alpha})`;
+        ctx.fill();
+      }
+
+      stateRef.current = requestAnimationFrame(draw);
+    }
+
+    const ro = new ResizeObserver(() => {
+      resize();
+    });
+    ro.observe(canvas);
+
+    stateRef.current = requestAnimationFrame(draw);
+
+    return () => {
+      cancelAnimationFrame(stateRef.current);
+      ro.disconnect();
+      canvas.removeEventListener("mousemove", onMove);
+      canvas.removeEventListener("mouseleave", onLeave);
+      section.removeEventListener("mousemove", onMove);
+      section.removeEventListener("mouseleave", onLeave);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: "absolute",
+        inset: 0,
+        width: "100%",
+        height: "100%",
+        display: "block",
+        pointerEvents: "none",
+        opacity: 0.85,
+      }}
+    />
+  );
+}
+
 const FEATURED = [
   {
     slug: "omg-commerce.html",
@@ -48,8 +211,9 @@ const SERVICES = [
 
 function Hero() {
   return (
-    <section style={{ paddingTop: 96, paddingBottom: 120 }}>
-      <div className="container">
+    <section style={{ paddingTop: 96, paddingBottom: 120, position: "relative", overflow: "hidden" }}>
+      <ParticleCanvas />
+      <div className="container" style={{ position: "relative", zIndex: 1 }}>
         <div className="eyebrow reveal" style={{ marginBottom: 28 }}>
           <span>Michael Peacock</span> &nbsp;·&nbsp; <span>UX &amp; Art Direction</span> &nbsp;·&nbsp; <span>Est. 2014</span>
         </div>
