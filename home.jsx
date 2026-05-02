@@ -11,7 +11,7 @@ function ParticleCanvas() {
 
     const SPACING = 16;       // grid cell size
     const DOT_R = 1.5;        // dot radius
-    const PUSH_RADIUS = 100;  // mouse influence radius
+    const PUSH_RADIUS = 200;  // mouse influence radius
     const MAX_PUSH = 22;      // max displacement in px
     const SPRING = 0.12;      // spring-back stiffness
     const DAMP = 0.72;        // velocity damping
