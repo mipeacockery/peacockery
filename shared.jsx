@@ -7,6 +7,57 @@ const NAV_LINKS = [
   { href: "contact.html", label: "Contact", key: "contact" },
 ];
 
+/* Footer social marks — Lucide (ISC) for LinkedIn + Dribbble; Spotify mark from Simple Icons (CC0) */
+function FooterIconLinkedIn() {
+  return (
+    <svg
+      className="footer-link__icon"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+      <rect width="4" height="12" x="2" y="9" />
+      <circle cx="4" cy="4" r="2" />
+    </svg>
+  );
+}
+function FooterIconDribbble() {
+  return (
+    <svg
+      className="footer-link__icon"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="12" r="10" />
+      <path d="M19.13 5.09C15.22 9.14 10 10.44 2.25 10.94" />
+      <path d="M21.75 12.84c-6.62-1.41-12.14 1-16.38 6.32" />
+      <path d="M8.56 2.75c4.37 6 6 9.42 8 17.72" />
+    </svg>
+  );
+}
+function FooterIconSpotify() {
+  return (
+    <svg className="footer-link__icon footer-link__icon--fill" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        fill="currentColor"
+        d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"
+      />
+    </svg>
+  );
+}
+
 function ThemeBoot() {
   React.useEffect(() => {
     const t = localStorage.getItem("peacockery-theme") || "dark";
@@ -135,17 +186,27 @@ function Footer() {
           </div>
           <div>
             <div className="eyebrow" style={{ marginBottom: 14 }}>Elsewhere</div>
-            <a className="footer-link" href="#"><span>LinkedIn</span><span className="arrow">↗</span></a>
-            <a className="footer-link" href="#"><span>Dribbble</span><span className="arrow">↗</span></a>
-            <a className="footer-link" href="#"><span>Read.cv</span><span className="arrow">↗</span></a>
-            <a className="footer-link" href="#"><span>Instagram</span><span className="arrow">↗</span></a>
-          </div>
-          <div>
-            <div className="eyebrow" style={{ marginBottom: 14 }}>Currently</div>
-            <p style={{ margin: 0, color: "var(--ink-2)", maxWidth: 260 }}>
-              Experience Design Director at <span style={{ color: "var(--ink)" }}>TierOne</span>.
-              Selectively taking on consulting + advisory work.
-            </p>
+            <a className="footer-link" href="https://www.linkedin.com/in/peacockery/">
+              <span className="footer-link__start">
+                <FooterIconLinkedIn />
+                <span>LinkedIn</span>
+              </span>
+              <span className="arrow">↗</span>
+            </a>
+            <a className="footer-link" href="https://dribbble.com/Peacockery">
+              <span className="footer-link__start">
+                <FooterIconDribbble />
+                <span>Dribbble</span>
+              </span>
+              <span className="arrow">↗</span>
+            </a>
+            <a className="footer-link" href="https://open.spotify.com/user/1244262106?si=a91f3588f90b48f0">
+              <span className="footer-link__start">
+                <FooterIconSpotify />
+                <span>Spotify</span>
+              </span>
+              <span className="arrow">↗</span>
+            </a>
           </div>
         </div>
         <div className="footer-meta">

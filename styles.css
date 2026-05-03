@@ -158,7 +158,7 @@ button { font-family: inherit; font-size: 1em; cursor: pointer; }
 }
 .footer-grid {
   display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr;
+  grid-template-columns: 1.4fr 1fr;
   gap: 48px;
 }
 .footer .display { line-height: 0.92; }
@@ -176,6 +176,22 @@ button { font-family: inherit; font-size: 1em; cursor: pointer; }
   text-transform: uppercase; color: var(--ink-2);
   transition: color 200ms, padding-left 240ms;
 }
+.footer-link__start {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.footer-link__icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  display: block;
+  color: inherit;
+}
+.footer-link__icon--fill {
+  transform: translateY(0.5px);
+}
 .footer-link:hover { color: var(--ink); padding-left: 6px; }
 .footer-link .arrow { transition: transform 240ms; }
 .footer-link:hover .arrow { transform: translate(4px, -4px); }
@@ -190,8 +206,8 @@ button { font-family: inherit; font-size: 1em; cursor: pointer; }
   to   { opacity: 1; }
 }
 @keyframes lineReveal {
-  from { transform: translateY(140%) skewY(-2deg); }
-  to   { transform: translateY(0)    skewY(0deg); }
+  from { transform: translateY(130%) skewX(18deg); }
+  to   { transform: translateY(0)    skewX(0deg); }
 }
 .hero-enter {
   opacity: 0;
@@ -207,12 +223,12 @@ button { font-family: inherit; font-size: 1em; cursor: pointer; }
   overflow: hidden;
   padding-bottom: 0.15em;
   margin-bottom: -0.15em;
-  padding-top: 0.1em;
-  margin-top: -0.1em;
+  padding-top: 0.15em;
+  margin-top: -0.15em;
 }
 .h1-line {
   display: block;
-  animation: lineReveal 1100ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: lineReveal 1400ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 /* Reveal-on-scroll */

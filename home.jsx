@@ -177,6 +177,15 @@ const FEATURED = [
     summary: "Editorial + e-comm system for a DTC home brand growing into retail.",
     tint: 4,
     label: "lifestyle photography"
+  },
+  {
+    slug: "#",
+    title: "LAC Branding",
+    role: "Brand",
+    year: "2023",
+    summary: "Identity refresh and guidelines for a logistics collective outgrowing its clip-art era.",
+    tint: 3,
+    label: "brand deck spread"
   }
 ];
 
@@ -243,7 +252,7 @@ function Hero() {
 }
 
 function MarqueeStrip() {
-  const items = ["Product Design", "Brand Identity", "Available May '26", "Springfield · MO", "TierOne", "Peacockery", "UX Direction"];
+  const items = ["Product Design", "Brand Identity", "Storytelling", "Art Direction", "Brand Strategy", "Design Systems"];
   const list = [...items, ...items, ...items];
   return (
     <div style={{
@@ -311,12 +320,6 @@ function Featured() {
   return (
     <section style={{ paddingTop: 120, paddingBottom: 40 }}>
       <div className="container">
-        <div className="reveal" style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 56 }}>
-          <div className="eyebrow">Selected Work — 2023 / 2026</div>
-          <a href="work.html" style={{ fontFamily: "var(--font-mono)", fontSize: "0.75rem", color: "var(--ink-2)", letterSpacing: "0.1em", textTransform: "uppercase" }}>
-            Index of all (24) →
-          </a>
-        </div>
         <div className="featured-grid">
           {FEATURED.map((p, i) => <FeaturedCard key={p.title} p={p} index={i} />)}
         </div>
