@@ -191,28 +191,28 @@ function Hero() {
     <section className="hero" style={{ paddingTop: 96, paddingBottom: 120, position: "relative", overflow: "hidden" }}>
       <ParticleCanvas />
       <div className="container" style={{ position: "relative", zIndex: 1 }}>
-        <div className="eyebrow hero-enter" style={{ marginBottom: 28, animationDelay: "350ms" }}>
+        <div className="eyebrow hero-enter" style={{ marginBottom: 28, animationDelay: "760ms" }}>
           <span>Michael Peacock</span> &nbsp;·&nbsp; <span>UX &amp; Art Direction</span>
         </div>
         <h1 className="display h-xxl" style={{ margin: 0 }}>
           <span className="h1-line-wrap">
-            <span className="h1-line" style={{ animationDelay: "750ms" }}>Designing brands</span>
+            <span className="h1-line" style={{ animationDelay: "200ms" }}>Designing brands</span>
           </span>
           <span className="h1-line-wrap">
-            <span className="h1-line" style={{ animationDelay: "930ms" }}>and products with</span>
+            <span className="h1-line" style={{ animationDelay: "370ms" }}>and products with</span>
           </span>
           <span className="h1-line-wrap">
-            <span className="h1-line" style={{ animationDelay: "1110ms" }}>
+            <span className="h1-line" style={{ animationDelay: "540ms" }}>
               <span style={{ color: "var(--accent)", fontFamily: '"Playfair Display", Georgia, serif', fontStyle: "italic", fontWeight: 400 }}>intentional</span> craft.
             </span>
           </span>
         </h1>
-        <div className="hero-enter" style={{ marginTop: 56, display: "grid", gridTemplateColumns: "1fr 1.1fr", gap: 64, alignItems: "end", animationDelay: "1400ms" }}>
+        <div className="hero-enter hero-cta-row" style={{ marginTop: 56, animationDelay: "950ms" }}>
           <p style={{ fontSize: "1.25rem", lineHeight: 1.45, color: "var(--ink-2)", margin: 0, maxWidth: 520 }}>
             I'm Michael, a designer working across UX, brand design, and art direction.
             Currently leading experience design at <span style={{ color: "var(--ink)" }}>TechStack</span> and <span style={{ color: "var(--ink)" }}>TierOne</span>.
           </p>
-          <div style={{ display: "flex", gap: 14, justifyContent: "flex-end", flexWrap: "wrap" }}>
+          <div className="hero-cta-buttons" style={{ display: "flex", gap: 14, justifyContent: "flex-end", flexWrap: "wrap" }}>
             <a href="work.html" className="pill solid">See selected work <span className="arrow">↘</span></a>
             <span
               className="pill pill--disabled pill-has-tooltip"
@@ -274,29 +274,33 @@ function MarqueeStrip() {
 function FeaturedCard({ p, index }) {
   const isBig = p.big;
   return (
-    <a href={p.slug} className="reveal" style={{
-      display: "block",
-      gridColumn: isBig ? "1 / -1" : "auto",
-      transition: "transform 600ms cubic-bezier(.2,.7,.2,1)"
-    }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 18 }}>
-        <div style={{ display: "flex", gap: 16, alignItems: "baseline" }}>
-          <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.75rem", color: "var(--muted)", letterSpacing: "0.1em" }}>
-            {String(index + 1).padStart(2, "0")}
-          </span>
-          <h3 className="display" style={{ fontSize: isBig ? "clamp(2.5rem, 5vw, 4.5rem)" : "clamp(1.75rem, 3vw, 2.5rem)", margin: 0 }}>
+    <a
+      href={p.slug}
+      className="reveal featured-card"
+      style={{
+        gridColumn: isBig ? "1 / -1" : "auto",
+        transition: "transform 600ms cubic-bezier(.2,.7,.2,1)",
+      }}
+    >
+      <div className="featured-card__top">
+        <div className="featured-card__titleline">
+          <span className="featured-card__index">{String(index + 1).padStart(2, "0")}</span>
+          <h3
+            className="display"
+            style={{ fontSize: isBig ? "clamp(2.5rem, 5vw, 4.5rem)" : "clamp(1.75rem, 3vw, 2.5rem)", margin: 0 }}
+          >
             {p.title}
           </h3>
         </div>
-        <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.6875rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--muted)" }}>
+        <div className="featured-card__meta">
           {p.role} · {p.year}
         </div>
       </div>
       <window.Placeholder label={p.label} kind="project" tint={p.tint} ratio={isBig ? "16 / 8" : "4 / 3"} />
-      <div style={{ marginTop: 18, display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 24 }}>
-        <p style={{ margin: 0, color: "var(--ink-2)", maxWidth: 540, fontSize: "1rem" }}>{p.summary}</p>
-        <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.6875rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--ink)" }}>
-          View case <span style={{ display: "inline-block", marginLeft: 8 }}>→</span>
+      <div className="featured-card__foot">
+        <p className="featured-card__summary">{p.summary}</p>
+        <span className="featured-card__cta">
+          View case <span className="featured-card__cta-arrow">→</span>
         </span>
       </div>
     </a>
@@ -313,7 +317,7 @@ function Featured() {
             Index of all (24) →
           </a>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64 }}>
+        <div className="featured-grid">
           {FEATURED.map((p, i) => <FeaturedCard key={p.title} p={p} index={i} />)}
         </div>
       </div>

@@ -28,10 +28,10 @@ function PeacockeryTweaks() {
     localStorage.setItem("peacockery-type", tweaks.type);
     const root = document.documentElement.style;
     const palettes = {
-      warm:  { bg:"#f3efe7", bg2:"#ebe5d8", ink:"#161412", ink2:"#3d362f", muted:"#7a6f63", line:"#d9d1c0", accent:"#FF6532" },
-      crisp: { bg:"#fafafa", bg2:"#f0f0f0", ink:"#0a0a0a", ink2:"#2a2a2a", muted:"#777777", line:"#e3e3e3", accent:"#FF6532" },
-      earth: { bg:"#eeece4", bg2:"#e1ddd0", ink:"#1f3a2f", ink2:"#2e4a3c", muted:"#6e7a6c", line:"#c9c4b3", accent:"#FF6532" },
-      ink:   { bg:"#0e0e0e", bg2:"#1a1916", ink:"#fafafa", ink2:"#cfc8b8", muted:"#8a8174", line:"#2a2723", accent:"#FF6532" }
+      warm:  { bg:"#f3efe7", bg2:"#ebe5d8", ink:"#161412", ink2:"#3d362f", muted:"#7a6f63", line:"#d9d1c0", accent:"#2947CE" },
+      crisp: { bg:"#fafafa", bg2:"#f0f0f0", ink:"#0a0a0a", ink2:"#2a2a2a", muted:"#777777", line:"#e3e3e3", accent:"#2947CE" },
+      earth: { bg:"#eeece4", bg2:"#e1ddd0", ink:"#1f3a2f", ink2:"#2e4a3c", muted:"#6e7a6c", line:"#c9c4b3", accent:"#2947CE" },
+      ink:   { bg:"#0e0e0e", bg2:"#1a1916", ink:"#fafafa", ink2:"#cfc8b8", muted:"#8a8174", line:"#2a2723", accent:"#2947CE" }
     };
     const paletteKey =
       surfaceTheme === "light" && tweaks.palette === "ink" ? "crisp" : tweaks.palette;
