@@ -191,14 +191,23 @@ function Hero() {
     <section className="hero" style={{ paddingTop: 96, paddingBottom: 120, position: "relative", overflow: "hidden" }}>
       <ParticleCanvas />
       <div className="container" style={{ position: "relative", zIndex: 1 }}>
-        <div className="eyebrow reveal" style={{ marginBottom: 28 }}>
+        <div className="eyebrow hero-enter" style={{ marginBottom: 28, animationDelay: "350ms" }}>
           <span>Michael Peacock</span> &nbsp;·&nbsp; <span>UX &amp; Art Direction</span>
         </div>
-        <h1 className="display h-xxl reveal" style={{ margin: 0 }}>
-          Designing brands<br />and products with<br />
-          <span style={{ color: "var(--accent)", fontFamily: '"Playfair Display", Georgia, serif', fontStyle: "italic", fontWeight: 400 }}>intentional</span> craft.
+        <h1 className="display h-xxl" style={{ margin: 0 }}>
+          <span className="h1-line-wrap">
+            <span className="h1-line" style={{ animationDelay: "750ms" }}>Designing brands</span>
+          </span>
+          <span className="h1-line-wrap">
+            <span className="h1-line" style={{ animationDelay: "930ms" }}>and products with</span>
+          </span>
+          <span className="h1-line-wrap">
+            <span className="h1-line" style={{ animationDelay: "1110ms" }}>
+              <span style={{ color: "var(--accent)", fontFamily: '"Playfair Display", Georgia, serif', fontStyle: "italic", fontWeight: 400 }}>intentional</span> craft.
+            </span>
+          </span>
         </h1>
-        <div className="reveal" style={{ marginTop: 56, display: "grid", gridTemplateColumns: "1fr 1.1fr", gap: 64, alignItems: "end" }}>
+        <div className="hero-enter" style={{ marginTop: 56, display: "grid", gridTemplateColumns: "1fr 1.1fr", gap: 64, alignItems: "end", animationDelay: "1400ms" }}>
           <p style={{ fontSize: "1.25rem", lineHeight: 1.45, color: "var(--ink-2)", margin: 0, maxWidth: 520 }}>
             I'm Michael, a designer working across UX, brand design, and art direction.
             Currently leading experience design at <span style={{ color: "var(--ink)" }}>TechStack</span> and <span style={{ color: "var(--ink)" }}>TierOne</span>.

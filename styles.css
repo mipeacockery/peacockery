@@ -167,10 +167,43 @@ button { font-family: inherit; font-size: 1em; cursor: pointer; }
 .footer-link .arrow { transition: transform 240ms; }
 .footer-link:hover .arrow { transform: translate(4px, -4px); }
 
+/* Hero load entrance */
+@keyframes heroIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes heroFade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes lineReveal {
+  from { transform: translateY(110%) skewY(-4deg); }
+  to   { transform: translateY(0)    skewY(0deg); }
+}
+.hero-enter {
+  opacity: 0;
+  animation: heroIn 900ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.hero-enter-fade {
+  opacity: 0;
+  animation: heroFade 1000ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+/* Masked line-by-line headline reveal */
+.h1-line-wrap {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.1em;
+  margin-bottom: -0.1em;
+}
+.h1-line {
+  display: block;
+  animation: lineReveal 1000ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
 /* Reveal-on-scroll */
 .reveal {
-  opacity: 0; transform: translateY(18px);
-  transition: opacity 800ms cubic-bezier(.2,.7,.2,1), transform 800ms cubic-bezier(.2,.7,.2,1);
+  opacity: 0; transform: translateY(10px);
+  transition: opacity 600ms cubic-bezier(.2,.7,.2,1), transform 600ms cubic-bezier(.2,.7,.2,1);
   will-change: opacity, transform;
 }
 .reveal.in { opacity: 1; transform: translateY(0); }
