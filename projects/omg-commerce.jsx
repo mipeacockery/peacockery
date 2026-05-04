@@ -5,7 +5,7 @@ function CaseHero() {
     <section style={{ paddingTop: 96, paddingBottom: 80 }}>
       <div className="container">
         <div className="reveal" style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 48, flexWrap: "wrap", gap: 16 }}>
-          <a href="work.html" style={{ fontFamily: "var(--font-mono)", fontSize: "0.75rem", color: "var(--ink-2)", letterSpacing: "0.1em", textTransform: "uppercase" }}>
+          <a href="../work.html" style={{ fontFamily: "var(--font-mono)", fontSize: "0.75rem", color: "var(--ink-2)", letterSpacing: "0.1em", textTransform: "uppercase" }}>
             ← Back to work
           </a>
           <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.6875rem", color: "var(--muted)", letterSpacing: "0.1em", textTransform: "uppercase" }}>
@@ -144,13 +144,13 @@ function NextProject() {
   return (
     <section style={{ paddingTop: 160, paddingBottom: 80 }}>
       <div className="container">
-        <a href="work.html" className="reveal" style={{ display: "block" }}>
+        <a href="bible-engagement-project.html" className="reveal" style={{ display: "block" }}>
           <div className="eyebrow" style={{ marginBottom: 24 }}>Next project</div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48, alignItems: "center" }}>
             <h2 className="display" style={{ fontSize: "clamp(3rem, 7vw, 6rem)", margin: 0, lineHeight: 0.95 }}>
-              Juxly<br />Medical
+              Bible Engagement<br />Project
             </h2>
-            <window.Placeholder label="next: Juxly Medical App" kind="next" tint={6} ratio="4 / 3" />
+            <window.Placeholder label="next: Bible Engagement Project" kind="next" tint={3} ratio="4 / 3" />
           </div>
         </a>
       </div>
@@ -209,7 +209,6 @@ function CaseStudy() {
       <Gallery />
       <NextProject />
       <window.Footer />
-      <window.PeacockeryTweaks />
     </>
   );
 }

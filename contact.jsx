@@ -72,7 +72,6 @@ function Contact() {
         </div>
       </section>
       <window.Footer />
-      <window.PeacockeryTweaks />
     </>
   );
 }

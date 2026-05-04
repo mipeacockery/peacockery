@@ -7,6 +7,12 @@ const NAV_LINKS = [
   { href: "contact.html", label: "Contact", key: "contact" },
 ];
 
+/** Prefix for internal .html links when a page lives under e.g. projects/ (set window.__PEACOCKERY_BASE in that page's HTML). */
+function siteHref(relPath) {
+  const base = typeof window !== "undefined" && window.__PEACOCKERY_BASE != null ? window.__PEACOCKERY_BASE : "";
+  return base + relPath;
+}
+
 /* Footer social marks — Lucide (ISC) for LinkedIn + Dribbble; Spotify mark from Simple Icons (CC0) */
 function FooterIconLinkedIn() {
   return (
@@ -179,7 +185,7 @@ function Nav({ active }) {
     <nav className={onHome ? "nav nav--home" : "nav"}>
       <div className="container nav-inner">
         <a
-          href="index.html"
+          href={siteHref("index.html")}
           className="nav-logo"
           aria-current={onHome ? "page" : undefined}
           aria-label="Peacockery"
@@ -236,7 +242,7 @@ function Nav({ active }) {
         </a>
         <div className="nav-links">
           {NAV_LINKS.map((l) => (
-            <a key={l.key} href={l.href} className={active === l.key ? "active" : ""}>
+            <a key={l.key} href={siteHref(l.href)} className={active === l.key ? "active" : ""}>
               {l.label}
             </a>
           ))}
@@ -486,4 +492,4 @@ function useReveal() {
   }, []);
 }
 
-Object.assign(window, { Nav, Footer, ElsewhereLinks, ThemeBoot, ThemeToggle, Placeholder, ParticleCanvas, useReveal, NAV_LINKS, CursorBoot });
+Object.assign(window, { Nav, Footer, ElsewhereLinks, ThemeBoot, ThemeToggle, Placeholder, ParticleCanvas, useReveal, NAV_LINKS, CursorBoot, siteHref });

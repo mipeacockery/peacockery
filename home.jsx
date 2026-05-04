@@ -2,14 +2,23 @@
 
 const FEATURED = [
   {
-    slug: "omg-commerce.html",
-    title: "OMG Commerce",
+    slug: "projects/omg-commerce.html",
+    title: "Bible Engagement Project",
     role: "Brand + Web",
     year: "2025",
     summary: "Reimagining the agency's digital storefront for a new chapter of Amazon and Google Ads expertise.",
     tint: 1,
     label: "agency homepage hero",
     big: true
+  }, 
+  {
+    slug: "projects/omg-commerce.html",
+    title: "OMG Commerce",
+    role: "Brand + Web",
+    year: "2025",
+    summary: "Reimagining the agency's digital storefront for a new chapter of Amazon and Google Ads expertise.",
+    tint: 1,
+    label: "agency homepage hero",
   },
   {
     slug: "#",
@@ -168,7 +177,7 @@ function StickyAbout() {
           </div>
           <div>
             <p className="display reveal" style={{ fontSize: "clamp(1.75rem, 3.4vw, 2.75rem)", lineHeight: 1.15, margin: 0 }}>
-              I've spent 15 years in the seam between <em style={{ color: "var(--accent)" }}>brand</em> and <em style={{ color: "var(--accent)" }}>product</em>, crafting
+              I've spent 15 years in the seam between <em className="accent-playfair">brand</em> and <em className="accent-playfair">product</em>, crafting
               design systems that survive contact with engineering, and product UX that respects the brand it's wearing.
             </p>
             <div className="reveal" style={{ marginTop: 56, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48 }}>
@@ -236,7 +245,6 @@ function Home() {
       <StickyAbout />
       <ClientsRow />
       <window.Footer />
-      <window.PeacockeryTweaks />
     </>
   );
 }

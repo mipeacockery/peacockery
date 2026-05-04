@@ -262,7 +262,6 @@ function About() {
       <SkillsSection />
       <Timeline />
       <window.Footer />
-      <window.PeacockeryTweaks />
     </>
   );
 }

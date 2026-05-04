@@ -144,7 +144,13 @@ button { font-family: inherit; font-size: 1em; cursor: pointer; }
   max-width: 100%;
 }
 .text-accent { color: var(--accent); }
-.h1-playfair { font-family: "Playfair Display", Georgia, serif; font-style: italic; font-weight: 400; }
+.h1-playfair,
+.accent-playfair {
+  font-family: "Playfair Display", Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+}
+.accent-playfair { color: var(--accent); }
 .h-xl  { font-size: clamp(2.75rem, 8vw, 7.5rem); }
 .h-l   { font-size: clamp(2.125rem, 5.2vw, 4.75rem); }
 .h-m   { font-size: clamp(1.5rem, 3vw, 2.5rem); }

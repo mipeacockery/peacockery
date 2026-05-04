@@ -1,7 +1,8 @@
 /* Work index page */
 
 const ALL_WORK = [
-  { slug: "omg-commerce.html", t: "OMG Commerce", c: ["Web", "Brand"], y: "2025", role: "Lead Designer", tint: 1 },
+  { slug: "projects/omg-commerce.html", t: "OMG Commerce", c: ["Web", "Brand"], y: "2025", role: "Lead Designer", tint: 1 },
+  { slug: "projects/bible-engagement-project.html", t: "Bible Engagement Project", c: ["App", "Product"], y: "2024", role: "Lead Designer", tint: 3 },
   { slug: "#", t: "Juxly Medical App", c: ["App", "UX"], y: "2024", role: "Senior PD", tint: 6 },
   { slug: "#", t: "LAC Branding", c: ["Brand"], y: "2023", role: "Art Director", tint: 4 },
   { slug: "#", t: "Mother's Brewery", c: ["Brand", "Packaging"], y: "2023", role: "Designer", tint: 5 },
@@ -122,7 +123,6 @@ function Work() {
       <WorkHero />
       <WorkList />
       <window.Footer />
-      <window.PeacockeryTweaks />
     </>
   );
 }
