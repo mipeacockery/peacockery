@@ -118,11 +118,10 @@ button { font-family: inherit; font-size: 1em; cursor: pointer; }
   font-size: 0.6471em;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--ink);
 }
 .hero .eyebrow {
   font-size: 13px;
-  color: var(--ink);
 }
 .rule { height: 1px; background: var(--line); width: 100%; }
 
@@ -352,6 +351,25 @@ button { font-family: inherit; font-size: 1em; cursor: pointer; }
 .placeholder.tinted-5 .ph-label { color: #f3efe7; background: rgba(0,0,0,0.25); }
 .placeholder.tinted-6 { background-color: #5e6b56; }
 .placeholder.tinted-6 .ph-label { color: #f3efe7; background: rgba(0,0,0,0.25); }
+
+/* Image thumbs — real images in a placeholder-like frame */
+.thumb {
+  min-width: 0;
+  position: relative;
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  overflow: hidden;
+  background: var(--bg-2);
+}
+.thumb--portrait {
+  aspect-ratio: 3 / 4;
+}
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
 /* Marquee-ish tag row */
 .tag-row {

@@ -303,7 +303,7 @@ function StickyAbout() {
       <div className="container">
         <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 80, alignItems: "start" }}>
           <div className="sticky-label reveal">
-            On the bench<br />
+            
             <span style={{ color: "var(--ink)", display: "block", marginTop: 8, fontSize: "0.75rem" }}>(02 / About)</span>
           </div>
           <div>
@@ -312,13 +312,17 @@ function StickyAbout() {
               design systems that survive contact with engineering, and product UX that respects the brand it's wearing.
             </p>
             <div className="reveal" style={{ marginTop: 56, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48 }}>
-              <window.Placeholder label="portrait, candid" kind="photo" tint={2} ratio="3 / 4" />
+              <div className="thumb thumb--portrait">
+                <img
+                  src="assets/me-laughing-bw.png"
+                  alt="Portrait of Michael Peacock laughing."
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
               <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
                 <p style={{ margin: 0, color: "var(--ink-2)", fontSize: "1.0625rem", lineHeight: 1.6 }}>
-                  Born in the Ozarks. Trained as a graphic designer, dragged into UX by curiosity, kept in it
-                  by the kind of problems where typography and data structures share a sketchbook page.
-                  I work fast, write a lot, and prefer projects where the brand and the product
-                  are arguing — that's where the good work lives.
+                My first real love was designing physical spaces, learning how light, materials, and spatial sequence shape the way people feel and move through the world (aka architecture). That knowledge was at the foundation of who I have become as a designer for the past 15+ years.
                 </p>
                 <a href="about.html" className="pill" style={{ alignSelf: "flex-start", marginTop: 32 }}>
                   Read the longer version <span className="arrow">↗</span>
@@ -333,7 +337,7 @@ function StickyAbout() {
 }
 
 function ClientsRow() {
-  const clients = ["TierOne", "OMG Commerce", "Juxly", "Mother's Brewery", "Big Blanket", "LAC", "Vantage", "Bass Pro"];
+  const clients = ["Mountaire Farms", "Assemblies of God", "Unilever", "Stok Coffee", "Danone", "Mother's Brewery", "Big Blanket", "Bass Pro"];
   return (
     <section style={{ paddingTop: 160, paddingBottom: 80 }}>
       <div className="container">

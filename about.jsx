@@ -3,9 +3,9 @@
 const TIMELINE = [
   { year: "2024 →", role: "Experience Design Director", at: "TierOne" },
   { year: "2020 — 24", role: "Design Lead", at: "OMG Commerce" },
-  { year: "2017 — 20", role: "Senior Product Designer", at: "Juxly" },
-  { year: "2014 — 17", role: "Designer", at: "Independent / Peacockery" },
-  { year: "2010 — 14", role: "BFA Graphic Design", at: "Missouri State" },
+  { year: "2015 — 20", role: "Senior Product Designer", at: "Juxly" },
+  { year: "2013 — 15", role: "Senior Designer", at: "Assemblies of God" },
+  { year: "2012 — 13", role: "Architectural Designer", at: "Torgerson Design Partners" },
 ];
 
 const PRINCIPLES = [
@@ -82,7 +82,7 @@ function Timeline() {
         <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 80, alignItems: "start" }}>
           <div className="sticky-label reveal">
             Working back<br />
-            <span style={{ color: "var(--ink)", display: "block", marginTop: 8, fontSize: "0.75rem" }}>(Career)</span>
+            <span style={{ color: "var(--ink)", display: "block", marginTop: 8, fontSize: "0.75rem" }}>(Experience)</span>
           </div>
           <div>
             {TIMELINE.map((t, i) => (
@@ -140,7 +140,6 @@ function About() {
       <AboutHero />
       <Principles />
       <Timeline />
-      <Aside />
       <window.Footer />
       <window.PeacockeryTweaks />
     </>
