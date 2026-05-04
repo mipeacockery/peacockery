@@ -194,51 +194,26 @@ function Hero() {
     <section className="hero" style={{ paddingTop: 96, paddingBottom: 120, position: "relative", overflow: "hidden" }}>
       <ParticleCanvas />
       <div className="container" style={{ position: "relative", zIndex: 1 }}>
-        <div className="eyebrow hero-enter" style={{ marginBottom: 28, animationDelay: "760ms" }}>
-          <span>Michael Peacock</span> &nbsp;·&nbsp; <span>UX &amp; Art Direction</span>
-        </div>
+        
         <h1 className="display h-xxl" style={{ margin: 0 }}>
           <span className="h1-line-wrap">
-            <span className="h1-line" style={{ animationDelay: "200ms" }}>Designing brands</span>
+            <span className="h1-line" style={{ animationDelay: "200ms" }}>Hola, I'm Michael, a</span>
           </span>
           <span className="h1-line-wrap">
-            <span className="h1-line" style={{ animationDelay: "370ms" }}>and products with</span>
+            <span className="h1-line" style={{ animationDelay: "370ms" }}>product designer &</span>
           </span>
           <span className="h1-line-wrap">
-            <span className="h1-line" style={{ animationDelay: "540ms" }}>
-              <span style={{ color: "var(--accent)", fontFamily: '"Playfair Display", Georgia, serif', fontStyle: "italic", fontWeight: 400 }}>intentional</span> craft.
-            </span>
+            <span className="h1-line" style={{ animationDelay: "540ms" }}>creative director currently</span>
+          </span>
+          <span className="h1-line-wrap">
+            <span className="h1-line" style={{ animationDelay: "710ms" }}>based out of <span className="h1-playfair">the Midwest.</span></span>
           </span>
         </h1>
         <div className="hero-enter hero-cta-row" style={{ marginTop: 56, animationDelay: "950ms" }}>
-          <p style={{ fontSize: "1.25rem", lineHeight: 1.45, color: "var(--ink-2)", margin: 0, maxWidth: 520 }}>
-            I'm Michael, a designer working across UX, brand design, and art direction.
-            Currently leading experience design at <span style={{ color: "var(--ink)" }}>TechStack</span> and <span style={{ color: "var(--ink)" }}>TierOne</span>.
+          <div aria-hidden="true" />
+          <p style={{ fontSize: "1.5rem", lineHeight: 1.45, color: "var(--ink-2)", margin: 0, maxWidth: 520 }}>
+            I'm currently leading experience design at <span style={{ color: "var(--ink)" }}>TechStack</span> and <span style={{ color: "var(--ink)" }}>TierOne</span>. I bring a over a decade of experience transforming brands, creating digital products, and making people feel something when they use them.
           </p>
-          <div className="hero-cta-buttons" style={{ display: "flex", gap: 14, justifyContent: "flex-end", flexWrap: "wrap" }}>
-            <a href="work.html" className="pill solid">See selected work <span className="arrow">↘</span></a>
-            <span
-              className="pill pill--disabled pill-has-tooltip"
-              role="button"
-              tabIndex={0}
-              aria-disabled="true"
-              aria-describedby="hero-cta-unavailable-tip"
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") e.preventDefault();
-              }}
-            >
-              Start a project <span className="arrow">↗</span>
-              <span
-                id="hero-cta-unavailable-tip"
-                className="pill-tooltip"
-                role="tooltip"
-                style={{ width: 200, minWidth: 200, maxWidth: 200, display: "inline-block" }}
-              >
-                Not open to new work atm
-              </span>
-         
-            </span>
-          </div>
         </div>
       </div>
     </section>
