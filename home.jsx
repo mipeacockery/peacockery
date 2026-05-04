@@ -206,7 +206,7 @@ function Hero() {
             <span className="h1-line" style={{ animationDelay: "540ms" }}>creative director currently</span>
           </span>
           <span className="h1-line-wrap">
-            <span className="h1-line" style={{ animationDelay: "710ms" }}>based out of <span className="h1-playfair">the Midwest.</span></span>
+            <span className="h1-line" style={{ animationDelay: "710ms" }}>based out of <span className="h1-playfair hero-midwest-gradient">the Midwest.</span></span>
           </span>
         </h1>
         <div className="hero-enter hero-cta-row" style={{ marginTop: 56, animationDelay: "950ms" }}>
