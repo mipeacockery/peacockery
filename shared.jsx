@@ -178,7 +178,7 @@ function Footer() {
           <div>
             <div className="eyebrow" style={{ marginBottom: 18 }}>Let's make something</div>
             <div className="display h-l" style={{ marginBottom: 18 }}>
-              Got a project in mind?
+              Get in touch
             </div>
             <a href="mailto:hello@peacockery.co" className="pill solid">
               hello@peacockery.co <span className="arrow">↗</span>

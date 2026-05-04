@@ -189,12 +189,6 @@ const FEATURED = [
   }
 ];
 
-const SERVICES = [
-  "Websites", "Branding", "App UI", "UX Research",
-  "Packaging", "Product", "Consulting", "Campaigns",
-  "Design Systems", "Environmental"
-];
-
 function Hero() {
   return (
     <section className="hero" style={{ paddingTop: 96, paddingBottom: 120, position: "relative", overflow: "hidden" }}>
@@ -328,43 +322,6 @@ function Featured() {
   );
 }
 
-function ServicesSection() {
-  return (
-    <section style={{ paddingTop: 160, paddingBottom: 60 }}>
-      <div className="container">
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 80, alignItems: "start" }}>
-          <div className="sticky-label reveal">
-            What I do<br />
-            <span style={{ color: "var(--ink)", display: "block", marginTop: 8, fontSize: "0.75rem" }}>(02 / Capabilities)</span>
-          </div>
-          <div className="reveal">
-            <h2 className="display h-l" style={{ margin: "0 0 56px", maxWidth: "14ch" }}>
-              A range that's <em style={{ color: "var(--accent)" }}>useful</em>, not unfocused.
-            </h2>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", borderTop: "1px solid var(--line)" }}>
-              {SERVICES.map((s, i) => (
-                <div key={s} style={{
-                  display: "flex", justifyContent: "space-between",
-                  padding: "22px 0",
-                  borderBottom: "1px solid var(--line)",
-                  borderRight: i % 2 === 0 ? "1px solid var(--line)" : "none",
-                  paddingRight: i % 2 === 0 ? 24 : 0,
-                  paddingLeft: i % 2 === 1 ? 24 : 0
-                }}>
-                  <span className="display" style={{ fontSize: "1.375rem" }}>{s}</span>
-                  <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.6875rem", color: "var(--muted)", letterSpacing: "0.1em" }}>
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function StickyAbout() {
   return (
     <section style={{ paddingTop: 160, paddingBottom: 60 }}>
@@ -372,12 +329,12 @@ function StickyAbout() {
         <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 80, alignItems: "start" }}>
           <div className="sticky-label reveal">
             On the bench<br />
-            <span style={{ color: "var(--ink)", display: "block", marginTop: 8, fontSize: "0.75rem" }}>(03 / About)</span>
+            <span style={{ color: "var(--ink)", display: "block", marginTop: 8, fontSize: "0.75rem" }}>(02 / About)</span>
           </div>
           <div>
-            <p className="display reveal" style={{ fontSize: "clamp(1.75rem, 3.4vw, 2.75rem)", lineHeight: 1.15, margin: 0, maxWidth: "22ch" }}>
-              I've spent a decade in the seam between <em style={{ color: "var(--accent)" }}>brand</em> and <em style={{ color: "var(--accent)" }}>product</em> —
-              identity systems that survive contact with engineering, and product UX that respects the brand it's wearing.
+            <p className="display reveal" style={{ fontSize: "clamp(1.75rem, 3.4vw, 2.75rem)", lineHeight: 1.15, margin: 0 }}>
+              I've spent 15 years in the seam between <em style={{ color: "var(--accent)" }}>brand</em> and <em style={{ color: "var(--accent)" }}>product</em>, crafting
+              design systems that survive contact with engineering, and product UX that respects the brand it's wearing.
             </p>
             <div className="reveal" style={{ marginTop: 56, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48 }}>
               <window.Placeholder label="portrait, candid" kind="photo" tint={2} ratio="3 / 4" />
@@ -437,7 +394,6 @@ function Home() {
       <Hero />
       <MarqueeStrip />
       <Featured />
-      <ServicesSection />
       <StickyAbout />
       <ClientsRow />
       <window.Footer />
