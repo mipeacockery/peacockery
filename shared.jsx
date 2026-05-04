@@ -248,6 +248,35 @@ function Nav({ active }) {
   );
 }
 
+function ElsewhereLinks() {
+  return (
+    <>
+      <div className="eyebrow" style={{ marginBottom: 14 }}>Elsewhere</div>
+      <a className="footer-link" href="https://www.linkedin.com/in/peacockery/">
+        <span className="footer-link__start">
+          <FooterIconLinkedIn />
+          <span>LinkedIn</span>
+        </span>
+        <span className="arrow">↗</span>
+      </a>
+      <a className="footer-link" href="https://dribbble.com/Peacockery">
+        <span className="footer-link__start">
+          <FooterIconDribbble />
+          <span>Dribbble</span>
+        </span>
+        <span className="arrow">↗</span>
+      </a>
+      <a className="footer-link" href="https://open.spotify.com/user/1244262106?si=a91f3588f90b48f0">
+        <span className="footer-link__start">
+          <FooterIconSpotify />
+          <span>Spotify</span>
+        </span>
+        <span className="arrow">↗</span>
+      </a>
+    </>
+  );
+}
+
 function Footer() {
   return (
     <footer className="footer">
@@ -263,28 +292,7 @@ function Footer() {
             </a>
           </div>
           <div>
-            <div className="eyebrow" style={{ marginBottom: 14 }}>Elsewhere</div>
-            <a className="footer-link" href="https://www.linkedin.com/in/peacockery/">
-              <span className="footer-link__start">
-                <FooterIconLinkedIn />
-                <span>LinkedIn</span>
-              </span>
-              <span className="arrow">↗</span>
-            </a>
-            <a className="footer-link" href="https://dribbble.com/Peacockery">
-              <span className="footer-link__start">
-                <FooterIconDribbble />
-                <span>Dribbble</span>
-              </span>
-              <span className="arrow">↗</span>
-            </a>
-            <a className="footer-link" href="https://open.spotify.com/user/1244262106?si=a91f3588f90b48f0">
-              <span className="footer-link__start">
-                <FooterIconSpotify />
-                <span>Spotify</span>
-              </span>
-              <span className="arrow">↗</span>
-            </a>
+            <ElsewhereLinks />
           </div>
         </div>
         <div className="footer-meta">
@@ -478,4 +486,4 @@ function useReveal() {
   }, []);
 }
 
-Object.assign(window, { Nav, Footer, ThemeBoot, ThemeToggle, Placeholder, ParticleCanvas, useReveal, NAV_LINKS, CursorBoot });
+Object.assign(window, { Nav, Footer, ElsewhereLinks, ThemeBoot, ThemeToggle, Placeholder, ParticleCanvas, useReveal, NAV_LINKS, CursorBoot });

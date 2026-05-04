@@ -15,15 +15,14 @@ const ALL_WORK = [
   { slug: "#", t: "Soundboard FM", c: ["App", "Brand"], y: "2023", role: "Art Director", tint: 3 },
 ];
 
-const FILTERS = ["All", "Brand", "Web", "App", "UX", "Packaging", "Campaign", "Environmental", "Product"];
+const FILTERS = ["All", "Brand", "Web", "App", "Packaging", "Campaign"];
 
 function WorkHero() {
   return (
     <section style={{ paddingTop: 96, paddingBottom: 60 }}>
       <div className="container">
-        <div className="eyebrow reveal" style={{ marginBottom: 24 }}>Index — 24 projects · 2018 / 2026</div>
         <h1 className="display h-xl reveal" style={{ margin: 0, maxWidth: "14ch" }}>
-          Selected, <em style={{ color: "var(--accent)" }}>not exhaustive</em>.
+          Selected works
         </h1>
       </div>
     </section>
@@ -33,8 +32,16 @@ function WorkHero() {
 function WorkList() {
   const [filter, setFilter] = React.useState("All");
   const [hover, setHover] = React.useState(null);
+  const isFirstRender = React.useRef(true);
 
   const filtered = filter === "All" ? ALL_WORK : ALL_WORK.filter(w => w.c.includes(filter));
+
+  React.useEffect(() => {
+    if (isFirstRender.current) { isFirstRender.current = false; return; }
+    requestAnimationFrame(() => {
+      document.querySelectorAll(".reveal:not(.in)").forEach(el => el.classList.add("in"));
+    });
+  }, [filter]);
 
   return (
     <section style={{ paddingTop: 40, paddingBottom: 80 }}>

@@ -6,7 +6,7 @@ const NOW = [
     title: "26 Reheat",
     sub: "Michael Peacock",
     href: "https://open.spotify.com/playlist/0DabdzwSghxaOE63cYmhCL?si=37393e2183074b22",
-    img: null,
+    img: "assets/26-reheat.jpg",
   },
   {
     label: "I'm playing",
@@ -25,9 +25,13 @@ const NOW = [
 ];
 
 const TIMELINE = [
-  { year: "2024 →", role: "Experience Design Director", at: "TierOne" },
-  { year: "2020 — 24", role: "Design Lead", at: "OMG Commerce" },
-  { year: "2015 — 20", role: "Senior Product Designer", at: "Juxly" },
+  { year: "2024 →", role: "Head of Product", at: "TechStack" },
+  { year: "2022 →", role: "Experience Design Director", at: "TierOne" },
+  { year: "2021 — 22", role: "Lead Product Designer", at: "FineTune" },
+  { year: "2018 — 21", role: "UX Director", at: "Hook" },
+  { year: "2012 — 20", role: "Adjunct Professor", at: "Drury University" },
+  { year: "2016 — 18", role: "Renior Art Director", at: "The Alchemedia Project" },
+  { year: "2015 — 16", role: "Senior Designer", at: "Revel" },
   { year: "2013 — 15", role: "Senior Designer", at: "Assemblies of God" },
   { year: "2012 — 13", role: "Architectural Designer", at: "Torgerson Design Partners" },
 ];
@@ -41,24 +45,26 @@ const PRINCIPLES = [
 
 function AboutHero() {
   return (
-    <section style={{ paddingTop: 96, paddingBottom: 80 }}>
+    <section style={{ paddingTop: 96, paddingBottom: 0 }}>
       <div className="container">
         <div className="eyebrow reveal" style={{ marginBottom: 28 }}>About / Michael Peacock</div>
-        <h1 className="display h-xl reveal" style={{ margin: "0 0 56px", maxWidth: "16ch" }}>
-          A designer who'd rather <em style={{ color: "var(--accent)" }}>ship</em> than narrate.
-        </h1>
-        <div className="reveal" style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 64, alignItems: "start" }}>
+        <div className="reveal" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "start" }}>
           <p style={{ fontSize: "1.1875rem", lineHeight: 1.55, color: "var(--ink-2)", margin: 0 }}>
-            I grew up in southern Missouri, the kind of place where the nearest art store
-            was an hour's drive and the nearest design studio was further. I learned by making things — band posters,
-            menu reprints for my parents' friends, a lot of bad logos before any good ones — and that habit
-            of just <em>building</em> never really left.
-            <br /><br />
-            For the last decade I've worked on the kind of brands that have to do real things in the real world:
-            EHRs that nurses use mid-shift, breweries that sell in gas stations, e-comm sites that have to load fast
-            on someone's parents' phone. The constraint is the project. I like it that way.
+            I grew up in Mexico, spent formative years in Florida and Texas, and came to Missouri for college, where I studied both architecture and fine arts at Drury University before ever working on a screen professionally. That path shapes how I work: a spatial, systems-level way of thinking about how people experience things, whether that's a building, a brand, or a product.
           </p>
-          <window.Placeholder label="portrait, studio" kind="photo" tint={2} ratio="3 / 4" />
+          <p style={{ fontSize: "1.1875rem", lineHeight: 1.55, color: "var(--ink-2)", margin: 0, paddingTop: 200 }}>
+            For the past decade I've led design at agencies, SaaS companies, and startups, working across brand identity, UX, and design systems, and increasingly into live code. Peacockery is where I take on work that calls for craft, clarity, and a real point of view.
+          </p>
+        </div>
+      </div>
+      <div className="about-collage-wrap">
+        <div className="container">
+          <img
+            className="about-collage-img"
+            src="assets/collage.png"
+            alt="Collage of travel, family, and candid photos"
+            loading="lazy"
+          />
         </div>
       </div>
     </section>
@@ -204,6 +210,48 @@ function NowSection() {
   );
 }
 
+function SkillsSection() {
+  const left = [
+    "Product Design",
+    "Research",
+    "Product Positioning",
+    "Prototyping",
+    "Mobile App Design",
+    "Design systems",
+    "Websites",
+  ];
+
+  const right = [
+    "Brand Strategy",
+    "Brand Positioning",
+    "Brand Narrative",
+    "Brand Identity",
+    "Creative Direction",
+    "Art Direction",
+    "Campaigns",
+  ];
+
+  return (
+    <section style={{ paddingTop: 120, paddingBottom: 60 }}>
+      <div className="container">
+        <div className="eyebrow reveal" style={{ marginBottom: 32 }}>Skills</div>
+        <div className="skills-grid reveal">
+          {Array.from({ length: Math.max(left.length, right.length) }).map((_, row) => (
+            <React.Fragment key={row}>
+              <div className={`skills-cell ${row === 0 ? "skills-cell--title" : ""}`}>
+                {left[row]}
+              </div>
+              <div className={`skills-cell ${row === 0 ? "skills-cell--title" : ""}`}>
+                {right[row]}
+              </div>
+            </React.Fragment>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function About() {
   window.useReveal();
   return (
@@ -211,7 +259,7 @@ function About() {
       <window.Nav active="about" />
       <AboutHero />
       <NowSection />
-      <Principles />
+      <SkillsSection />
       <Timeline />
       <window.Footer />
       <window.PeacockeryTweaks />

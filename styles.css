@@ -4,6 +4,7 @@
   /* Palette: warm off-white (default) */
   --bg: #f3efe7;
   --bg-2: #ebe5d8;
+  --primary-bg-color: var(--bg-2);
   --ink: #161412;
   --ink-2: #3d362f;
   --muted: #7a6f63;
@@ -291,7 +292,14 @@ button { font-family: inherit; font-size: 1em; cursor: pointer; }
   animation: lineReveal 1400ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.hero-midwest-gradient {
+.hero-gradient,
+.hero-gradient-reverse {
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero-gradient {
   background-image: linear-gradient(
     90deg,
     var(--ink) 0%,
@@ -299,9 +307,16 @@ button { font-family: inherit; font-size: 1em; cursor: pointer; }
     #b34cf6 68%,
     var(--accent) 100%
   );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+}
+
+.hero-gradient-reverse {
+  background-image: linear-gradient(
+    90deg,
+    var(--accent) 0%,
+    #b34cf6 32%,
+    #ff6a2e 62%,
+    var(--ink) 100%
+  );
 }
 
 /* Reveal-on-scroll */
@@ -563,7 +578,8 @@ button { font-family: inherit; font-size: 1em; cursor: pointer; }
 }
 
 .now-card {
-  background: #1c1a17;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
   border-radius: 14px;
   overflow: hidden;
   display: flex;
@@ -575,7 +591,7 @@ button { font-family: inherit; font-size: 1em; cursor: pointer; }
 }
 .now-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 12px 40px color-mix(in oklab, var(--ink) 20%, transparent);
 }
 
 .now-card__thumb {
@@ -597,8 +613,8 @@ button { font-family: inherit; font-size: 1em; cursor: pointer; }
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #2f2d2a;
-  color: rgba(241, 236, 226, 0.25);
+  background: color-mix(in oklab, var(--bg-2) 60%, var(--bg));
+  color: var(--muted);
 }
 
 .now-card__body {
@@ -613,7 +629,7 @@ button { font-family: inherit; font-size: 1em; cursor: pointer; }
   font-size: 0.5875rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(241, 236, 226, 0.38);
+  color: var(--muted);
   margin-bottom: auto;
 }
 .now-card__title {
@@ -622,7 +638,7 @@ button { font-family: inherit; font-size: 1em; cursor: pointer; }
   font-size: 1.1875rem;
   letter-spacing: -0.02em;
   line-height: 1.1;
-  color: #f1ece2;
+  color: var(--ink);
   margin: 0 0 5px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -630,9 +646,33 @@ button { font-family: inherit; font-size: 1em; cursor: pointer; }
 }
 .now-card__sub {
   font-size: 0.8125rem;
-  color: rgba(241, 236, 226, 0.45);
+  color: var(--ink-2);
   margin: 0;
   line-height: 1.3;
+}
+
+/* Skills grid */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid var(--line);
+  gap: 0;
+}
+.skills-cell {
+  padding: 32px 20px;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  color: var(--ink-2);
+  min-width: 0;
+}
+.skills-cell:nth-child(odd) {
+  border-right: 1px solid var(--line);
+}
+.skills-cell--title {
+  color: var(--ink);
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  letter-spacing: -0.02em;
 }
 
 .contact-main-grid {
@@ -640,6 +680,17 @@ button { font-family: inherit; font-size: 1em; cursor: pointer; }
   grid-template-columns: 1.4fr 1fr;
   gap: 80px;
   align-items: start;
+}
+
+/* About hero collage (single asset) */
+.about-collage-wrap {
+  margin-top: 72px;
+}
+
+.about-collage-img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 @media (max-width: 800px) {
@@ -667,5 +718,12 @@ button { font-family: inherit; font-size: 1em; cursor: pointer; }
   .now-grid {
     grid-template-columns: 1fr;
     gap: 10px;
+  }
+  .skills-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .skills-cell:nth-child(odd) {
+    border-right: none;
   }
 }

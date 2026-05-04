@@ -24,7 +24,7 @@ function Contact() {
           <h1 className="display h-xl" style={{ margin: "0 0 56px", maxWidth: "16ch" }}>
             <span className="h1-line-wrap">
               <span className="h1-line" style={{ animationDelay: "200ms" }}>
-                <em style={{ color: "var(--accent)" }}>Hello —</em>
+                <span className="h1-playfair hero-gradient-reverse">Hello,</span>
               </span>
             </span>
             <span className="h1-line-wrap">
@@ -66,16 +66,7 @@ function Contact() {
                 hello@peacockery.co
               </a>
 
-              <div className="eyebrow" style={{ marginBottom: 14 }}>Elsewhere</div>
-              <a className="footer-link" href="#"><span>LinkedIn</span><span className="arrow">↗</span></a>
-              <a className="footer-link" href="#"><span>Dribbble</span><span className="arrow">↗</span></a>
-              <a className="footer-link" href="#"><span>Read.cv</span><span className="arrow">↗</span></a>
-
-              <div className="eyebrow" style={{ marginTop: 40, marginBottom: 14 }}>Currently</div>
-              <p style={{ color: "var(--ink-2)", margin: 0, fontSize: "0.9375rem", lineHeight: 1.6 }}>
-                Booking new consulting engagements for <span style={{ color: "var(--ink)" }}>Q3 2026</span>.
-                Best fit: brand-led product teams between Series A and Series C.
-              </p>
+              <window.ElsewhereLinks />
             </aside>
           </div>
         </div>
@@ -88,13 +79,13 @@ function Contact() {
 
 function Field({ label, name, type = "text", textarea, optional }) {
   return (
-    <label style={{ display: "block", paddingTop: 24, paddingBottom: 24, borderBottom: "1px solid var(--line)" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 10, fontFamily: "var(--font-mono)", fontSize: "0.6875rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--muted)" }}>
+    <label style={{ display: "block", paddingTop: 24, paddingBottom: 24 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 10, fontFamily: "var(--font-mono)", fontSize: "0.6875rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--ink)" }}>
         <span>{label}</span>
         {optional && <span>Optional</span>}
       </div>
       {textarea ? (
-        <textarea name={name} rows="3" style={fieldStyle} required={!optional} />
+        <textarea name={name} rows="3" style={textareaFieldStyle} required={!optional} />
       ) : (
         <input type={type} name={name} style={fieldStyle} required={!optional} />
       )}
@@ -124,13 +115,23 @@ function SelectField({ label, name, options }) {
 const fieldStyle = {
   width: "100%",
   border: "none",
-  background: "transparent",
+  borderBottom: "1px solid var(--muted)",
+  background: "var(--primary-bg-color)",
+  boxSizing: "border-box",
+  height: 48,
+  minHeight: 40,
   fontFamily: "var(--font-display)",
   fontSize: "1.5rem",
   color: "var(--ink)",
   outline: "none",
   padding: 0,
   resize: "vertical",
+};
+
+const textareaFieldStyle = {
+  ...fieldStyle,
+  height: 120,
+  minHeight: 120,
 };
 
 ReactDOM.createRoot(document.getElementById("app")).render(<Contact />);
