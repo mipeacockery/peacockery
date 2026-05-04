@@ -1,5 +1,29 @@
 /* About page */
 
+const NOW = [
+  {
+    label: "I'm listening to",
+    title: "26 Reheat",
+    sub: "Michael Peacock",
+    href: "https://open.spotify.com/playlist/0DabdzwSghxaOE63cYmhCL?si=37393e2183074b22",
+    img: null,
+  },
+  {
+    label: "I'm playing",
+    title: "Rocket League",
+    sub: "lil_dundt",
+    href: "https://store.steampowered.com/app/252950/Rocket_League/",
+    img: "assets/rocket-league.jpg",
+  },
+  {
+    label: "I'm reading",
+    title: "The Path of Daggers",
+    sub: "Wheel of Time · Book 8",
+    href: "https://www.goodreads.com/book/show/14001.The_Path_of_Daggers",
+    img: "assets/path-of-daggers.jpg",
+  },
+];
+
 const TIMELINE = [
   { year: "2024 →", role: "Experience Design Director", at: "TierOne" },
   { year: "2020 — 24", role: "Design Lead", at: "OMG Commerce" },
@@ -132,12 +156,61 @@ function Aside() {
   );
 }
 
+function NowThumb({ src, alt }) {
+  const [failed, setFailed] = React.useState(false);
+  if (!src || failed) {
+    return (
+      <div className="now-card__thumb now-card__thumb--placeholder">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" />
+          <polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none" />
+        </svg>
+      </div>
+    );
+  }
+  return (
+    <div className="now-card__thumb">
+      <img src={src} alt={alt || ""} onError={() => setFailed(true)} />
+    </div>
+  );
+}
+
+function NowSection() {
+  return (
+    <section style={{ paddingTop: 120, paddingBottom: 60 }}>
+      <div className="container">
+        <div className="now-grid reveal">
+          {NOW.map((item) => (
+            <a
+              key={item.title}
+              href={item.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="now-card"
+            >
+              <NowThumb src={item.img} alt={item.title} />
+              <div className="now-card__body">
+                <div className="now-card__overline">{item.label}</div>
+                <div>
+                  <div className="now-card__title">{item.title}</div>
+                  <div className="now-card__sub">{item.sub}</div>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function About() {
   window.useReveal();
   return (
     <>
       <window.Nav active="about" />
       <AboutHero />
+      <NowSection />
       <Principles />
       <Timeline />
       <window.Footer />

@@ -310,6 +310,143 @@ function Placeholder({ label, kind, tint = 1, ratio = "16 / 10", style }) {
   );
 }
 
+/** Interactive dot grid background — used by homepage and Contact hero */
+function ParticleCanvas() {
+  const canvasRef = React.useRef(null);
+  const rafRef = React.useRef(null);
+
+  React.useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+
+    const SPACING = 12;
+    const DOT_R = 1.5;
+    const PUSH_RADIUS = 400;
+    const MAX_PUSH = 55;
+    const SPRING = 0.12;
+    const DAMP = 0.72;
+
+    let dots = [];
+    let logicalW = 0, logicalH = 0;
+    const mouse = { x: -9999, y: -9999 };
+
+    function buildGrid() {
+      const cols = Math.ceil(logicalW / SPACING) + 1;
+      const rows = Math.ceil(logicalH / SPACING) + 1;
+      dots = [];
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          dots.push({
+            ox: c * SPACING,
+            oy: r * SPACING,
+            dx: 0,
+            dy: 0,
+            vx: 0,
+            vy: 0,
+          });
+        }
+      }
+    }
+
+    function resize() {
+      const dpr = window.devicePixelRatio || 1;
+      logicalW = canvas.offsetWidth;
+      logicalH = canvas.offsetHeight;
+      canvas.width = logicalW * dpr;
+      canvas.height = logicalH * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      buildGrid();
+    }
+
+    resize();
+
+    const section = canvas.parentElement;
+
+    function onMove(e) {
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+    }
+    function onLeave() { mouse.x = -9999; mouse.y = -9999; }
+
+    section.addEventListener("mousemove", onMove);
+    section.addEventListener("mouseleave", onLeave);
+
+    function draw() {
+      ctx.clearRect(0, 0, logicalW, logicalH);
+
+      const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+      const dotColor = isDark ? "rgba(255,253,245,0.22)" : "rgba(0,0,0,0.13)";
+
+      ctx.fillStyle = dotColor;
+
+      for (const d of dots) {
+        const ax = -d.dx * SPRING;
+        const ay = -d.dy * SPRING;
+
+        const px = d.ox + d.dx - mouse.x;
+        const py = d.oy + d.dy - mouse.y;
+        const dist = Math.sqrt(px * px + py * py);
+        if (dist < PUSH_RADIUS && dist > 0) {
+          const t = 1 - dist / PUSH_RADIUS;
+          const force = t * t * MAX_PUSH * 0.18;
+          d.vx += (px / dist) * force;
+          d.vy += (py / dist) * force;
+        }
+
+        d.vx = (d.vx + ax) * DAMP;
+        d.vy = (d.vy + ay) * DAMP;
+        d.dx += d.vx;
+        d.dy += d.vy;
+
+        const dispLen = Math.sqrt(d.dx * d.dx + d.dy * d.dy);
+        if (dispLen > MAX_PUSH) {
+          d.dx = (d.dx / dispLen) * MAX_PUSH;
+          d.dy = (d.dy / dispLen) * MAX_PUSH;
+        }
+
+        const x = d.ox + d.dx;
+        const y = d.oy + d.dy;
+        if (x < -SPACING || x > logicalW + SPACING || y < -SPACING || y > logicalH + SPACING) continue;
+
+        ctx.beginPath();
+        ctx.arc(x, y, DOT_R, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      rafRef.current = requestAnimationFrame(draw);
+    }
+
+    const ro = new ResizeObserver(resize);
+    ro.observe(canvas);
+
+    rafRef.current = requestAnimationFrame(draw);
+
+    return () => {
+      cancelAnimationFrame(rafRef.current);
+      ro.disconnect();
+      section.removeEventListener("mousemove", onMove);
+      section.removeEventListener("mouseleave", onLeave);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: "absolute",
+        inset: 0,
+        width: "100%",
+        height: "100%",
+        display: "block",
+        pointerEvents: "none",
+        opacity: 0.5,
+      }}
+    />
+  );
+}
+
 function useReveal() {
   React.useEffect(() => {
     const els = document.querySelectorAll(".reveal");
@@ -341,4 +478,4 @@ function useReveal() {
   }, []);
 }
 
-Object.assign(window, { Nav, Footer, ThemeBoot, ThemeToggle, Placeholder, useReveal, NAV_LINKS, CursorBoot });
+Object.assign(window, { Nav, Footer, ThemeBoot, ThemeToggle, Placeholder, ParticleCanvas, useReveal, NAV_LINKS, CursorBoot });

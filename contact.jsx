@@ -1,36 +1,53 @@
 /* Contact page */
 
 function Contact() {
-  window.useReveal();
   const [submitted, setSubmitted] = React.useState(false);
 
   return (
     <>
       <window.Nav active="contact" />
-      <section style={{ paddingTop: 96, paddingBottom: 80, minHeight: "calc(100vh - 200px)" }}>
-        <div className="container">
-          <div className="eyebrow reveal" style={{ marginBottom: 28 }}>Contact / Currently available</div>
-          <h1 className="display h-xl reveal" style={{ margin: "0 0 56px", maxWidth: "16ch" }}>
-            <em style={{ color: "var(--accent)" }}>Hello —</em><br />tell me what you're making.
+      <section
+        className="hero"
+        style={{
+          paddingTop: 96,
+          paddingBottom: 120,
+          minHeight: "calc(100vh - 200px)",
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        <window.ParticleCanvas />
+        <div className="container" style={{ position: "relative", zIndex: 1 }}>
+          <div className="eyebrow hero-enter" style={{ marginBottom: 28, animationDelay: "80ms" }}>
+            Contact
+          </div>
+          <h1 className="display h-xl" style={{ margin: "0 0 56px", maxWidth: "16ch" }}>
+            <span className="h1-line-wrap">
+              <span className="h1-line" style={{ animationDelay: "200ms" }}>
+                <em style={{ color: "var(--accent)" }}>Hello —</em>
+              </span>
+            </span>
+            <span className="h1-line-wrap">
+              <span className="h1-line" style={{ animationDelay: "370ms" }}>
+                tell me what you're cooking up.
+              </span>
+            </span>
           </h1>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 80, alignItems: "start" }}>
-            <div className="reveal">
+          <div className="hero-enter contact-main-grid" style={{ animationDelay: "950ms" }}>
+            <div>
               {!submitted ? (
                 <form onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }}>
                   <Field label="Your name" name="name" />
                   <Field label="Email" name="email" type="email" />
                   <Field label="Company / context" name="company" optional />
-                  <SelectField label="What kind of project?" name="project" options={[
-                    "Brand identity", "Website / web app", "Product UX", "Design system", "Consulting / advisory", "Just saying hi"
-                  ]} />
                   <Field label="Tell me a bit more" name="brief" textarea />
                   <button type="submit" className="pill solid" style={{ marginTop: 24 }}>
                     Send it <span className="arrow">↗</span>
                   </button>
                 </form>
               ) : (
-                <div className="reveal in" style={{ padding: "48px 0" }}>
+                <div style={{ padding: "48px 0" }}>
                   <div className="eyebrow" style={{ marginBottom: 16 }}>Message sent</div>
                   <h2 className="display h-l" style={{ margin: "0 0 24px", maxWidth: "16ch" }}>
                     Got it. <em style={{ color: "var(--accent)" }}>Thanks.</em>
@@ -43,7 +60,7 @@ function Contact() {
               )}
             </div>
 
-            <aside className="reveal" style={{ borderLeft: "1px solid var(--line)", paddingLeft: 48 }}>
+            <aside className="contact-aside" style={{ borderLeft: "1px solid var(--line)", paddingLeft: 48 }}>
               <div className="eyebrow" style={{ marginBottom: 18 }}>Or reach me directly</div>
               <a href="mailto:hello@peacockery.co" className="display" style={{ display: "block", fontSize: "1.375rem", marginBottom: 32 }}>
                 hello@peacockery.co
