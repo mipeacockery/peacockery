@@ -58,6 +58,63 @@ function FooterIconSpotify() {
   );
 }
 
+function CursorBoot() {
+  React.useEffect(() => {
+    if (!window.matchMedia("(pointer: fine)").matches) return;
+
+    const cursor = document.createElement("div");
+    cursor.id = "cursor";
+    document.body.appendChild(cursor);
+
+    const onMove = (e) => {
+      cursor.style.left = e.clientX + "px";
+      cursor.style.top = e.clientY + "px";
+    };
+
+    const TEXT = "h1, h2, h3, h4, h5, h6, p, li, dt, dd, figcaption, blockquote";
+    const HOVER = "a, .featured-card";
+
+    const onOver = (e) => {
+      const hEl = e.target.closest(HOVER);
+      if (hEl) {
+        cursor.classList.add("cursor--hover");
+        cursor.classList.remove("cursor--text");
+        cursor.style.height = "";
+        return;
+      }
+      const tEl = e.target.closest(TEXT);
+      if (!tEl) return;
+      const fs = parseFloat(getComputedStyle(tEl).fontSize);
+      cursor.classList.add("cursor--text");
+      cursor.style.height = fs * 1.4 + "px";
+    };
+
+    const onOut = (e) => {
+      const hEl = e.target.closest(HOVER);
+      if (hEl) {
+        if (!hEl.contains(e.relatedTarget)) cursor.classList.remove("cursor--hover");
+        return;
+      }
+      const tEl = e.target.closest(TEXT);
+      if (!tEl || tEl.contains(e.relatedTarget)) return;
+      cursor.classList.remove("cursor--text");
+      cursor.style.height = "";
+    };
+
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseover", onOver);
+    document.addEventListener("mouseout", onOut);
+
+    return () => {
+      document.removeEventListener("mousemove", onMove);
+      document.removeEventListener("mouseover", onOver);
+      document.removeEventListener("mouseout", onOut);
+      cursor.remove();
+    };
+  }, []);
+  return null;
+}
+
 function ThemeBoot() {
   React.useEffect(() => {
     const t = localStorage.getItem("peacockery-theme") || "dark";
@@ -117,6 +174,8 @@ function ThemeToggle() {
 function Nav({ active }) {
   const onHome = active === "index";
   return (
+    <>
+    <CursorBoot />
     <nav className={onHome ? "nav nav--home" : "nav"}>
       <div className="container nav-inner">
         <a
@@ -185,6 +244,7 @@ function Nav({ active }) {
         </div>
       </div>
     </nav>
+    </>
   );
 }
 
@@ -281,4 +341,4 @@ function useReveal() {
   }, []);
 }
 
-Object.assign(window, { Nav, Footer, ThemeBoot, ThemeToggle, Placeholder, useReveal, NAV_LINKS });
+Object.assign(window, { Nav, Footer, ThemeBoot, ThemeToggle, Placeholder, useReveal, NAV_LINKS, CursorBoot });
