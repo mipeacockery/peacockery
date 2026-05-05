@@ -33,8 +33,8 @@
   --accent-soft: #4461de;
 }
 
-/* Palette: ink — near-black surface, high-contrast type (overrides :root / theme when selected) */
-:root[data-palette="ink"] {
+/* Palette: ink — near-black surface, high-contrast type (dark mode only) */
+:root[data-theme="dark"][data-palette="ink"] {
   --bg: #0e0e0e;
   --bg-2: #1a1916;
   --ink: #fafafa;
