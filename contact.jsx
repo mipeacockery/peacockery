@@ -60,7 +60,7 @@ function Contact() {
               )}
             </div>
 
-            <aside className="contact-aside" style={{ borderLeft: "1px solid var(--line)", paddingLeft: 48 }}>
+            <aside className="contact-aside">
               <div className="eyebrow" style={{ marginBottom: 18 }}>Or reach me directly</div>
               <a href="mailto:hello@peacockery.co" className="display" style={{ display: "block", fontSize: "1.375rem", marginBottom: 32 }}>
                 hello@peacockery.co

@@ -30,7 +30,7 @@ const TIMELINE = [
   { year: "2021 — 22", role: "Lead Product Designer", at: "FineTune" },
   { year: "2018 — 21", role: "UX Director", at: "Hook" },
   { year: "2012 — 20", role: "Adjunct Professor", at: "Drury University" },
-  { year: "2016 — 18", role: "Renior Art Director", at: "The Alchemedia Project" },
+  { year: "2016 — 18", role: "Senior Art Director", at: "The Alchemedia Project" },
   { year: "2015 — 16", role: "Senior Designer", at: "Revel" },
   { year: "2013 — 15", role: "Senior Designer", at: "Assemblies of God" },
   { year: "2012 — 13", role: "Architectural Designer", at: "Torgerson Design Partners" },
@@ -48,11 +48,11 @@ function AboutHero() {
     <section style={{ paddingTop: 96, paddingBottom: 0 }}>
       <div className="container">
         <div className="eyebrow reveal" style={{ marginBottom: 28 }}>About / Michael Peacock</div>
-        <div className="reveal" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "start" }}>
+        <div className="reveal about-hero-grid">
           <p style={{ fontSize: "1.1875rem", lineHeight: 1.55, color: "var(--ink-2)", margin: 0 }}>
             I grew up in Mexico, spent formative years in Florida and Texas, and came to Missouri for college, where I studied both architecture and fine arts at Drury University before ever working on a screen professionally. That path shapes how I work: a spatial, systems-level way of thinking about how people experience things, whether that's a building, a brand, or a product.
           </p>
-          <p style={{ fontSize: "1.1875rem", lineHeight: 1.55, color: "var(--ink-2)", margin: 0, paddingTop: 200 }}>
+          <p className="about-hero-col about-hero-col--offset" style={{ fontSize: "1.1875rem", lineHeight: 1.55, color: "var(--ink-2)", margin: 0 }}>
             For the past decade I've led design at agencies, SaaS companies, and startups, working across brand identity, UX, and design systems, and increasingly into live code. Peacockery is where I take on work that calls for craft, clarity, and a real point of view.
           </p>
         </div>
@@ -109,27 +109,20 @@ function Timeline() {
   return (
     <section style={{ paddingTop: 120, paddingBottom: 60 }}>
       <div className="container">
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 80, alignItems: "start" }}>
+        <div className="about-experience-grid">
           <div className="sticky-label reveal">
             Working back<br />
             <span style={{ color: "var(--ink)", display: "block", marginTop: 8, fontSize: "0.75rem" }}>(Experience)</span>
           </div>
           <div>
             {TIMELINE.map((t, i) => (
-              <div key={i} className="reveal" style={{
-                display: "grid",
-                gridTemplateColumns: "180px 1fr 1fr",
-                gap: 24,
-                padding: "28px 0",
-                borderBottom: "1px solid var(--line)",
-                borderTop: i === 0 ? "1px solid var(--line)" : "none",
-                alignItems: "baseline"
-              }}>
-                <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.75rem", color: "var(--muted)", letterSpacing: "0.1em" }}>
-                  {t.year}
-                </div>
-                <div className="display" style={{ fontSize: "1.375rem" }}>{t.role}</div>
-                <div style={{ color: "var(--ink-2)", fontSize: "1rem" }}>{t.at}</div>
+              <div
+                key={i}
+                className={`reveal about-timeline-row ${i === 0 ? "about-timeline-row--first" : ""}`}
+              >
+                <div className="about-timeline-role display">{t.role}</div>
+                <div className="about-timeline-at">{t.at}</div>
+                <div className="about-timeline-year">{t.year}</div>
               </div>
             ))}
           </div>

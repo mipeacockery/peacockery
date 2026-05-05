@@ -750,6 +750,10 @@ button { font-family: inherit; font-size: 1em; cursor: pointer; }
   gap: 80px;
   align-items: start;
 }
+.contact-aside {
+  border-left: 1px solid var(--line);
+  padding-left: 48px;
+}
 
 /* About hero collage (single asset) */
 .about-collage-wrap {
@@ -760,6 +764,51 @@ button { font-family: inherit; font-size: 1em; cursor: pointer; }
   display: block;
   width: 100%;
   height: auto;
+}
+
+/* About page */
+.about-hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: start;
+}
+.about-hero-col--offset {
+  padding-top: 200px;
+}
+
+.about-experience-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.about-timeline-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 100px;
+  gap: 24px;
+  padding: 28px 0;
+  border-bottom: 1px solid var(--line);
+  align-items: baseline;
+}
+.about-timeline-row--first {
+  border-top: 1px solid var(--line);
+}
+.about-timeline-role {
+  font-size: 1.375rem;
+}
+.about-timeline-at {
+  color: var(--ink-2);
+  font-size: 1rem;
+}
+.about-timeline-year {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-align: right;
+  white-space: nowrap;
 }
 
 @media (max-width: 800px) {
@@ -829,6 +878,38 @@ button { font-family: inherit; font-size: 1em; cursor: pointer; }
   .clients-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .about-hero-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .about-hero-col--offset {
+    padding-top: 0;
+  }
+
+  .about-experience-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .about-experience-grid .sticky-label {
+    position: static;
+    top: auto;
+  }
+
+  .about-timeline-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "role year"
+      "at   year";
+    gap: 6px 16px;
+    align-items: start;
+  }
+  .about-timeline-role { grid-area: role; }
+  .about-timeline-at { grid-area: at; }
+  .about-timeline-year {
+    grid-area: year;
+    align-self: center;
+  }
   .work-list__item {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     grid-template-areas:
@@ -853,5 +934,10 @@ button { font-family: inherit; font-size: 1em; cursor: pointer; }
   .nav-links { gap: 16px; }
   .theme-toggle { display: none; }
 
-
+  .contact-aside {
+    border-top: none;
+    padding-top: 0;
+    border-left: none;
+    padding-left: 0;
+  }
 }
