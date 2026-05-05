@@ -1,5 +1,7 @@
 /* Home page */
 
+/* ─── Data ─── */
+
 const FEATURED = [
   {
     slug: "projects/bible-engagement-project.html",
@@ -10,7 +12,7 @@ const FEATURED = [
     tint: 1,
     label: "agency homepage hero",
     big: true
-  }, 
+  },
   {
     slug: "projects/omg-commerce.html",
     title: "OMG Commerce",
@@ -38,15 +40,7 @@ const FEATURED = [
     tint: 5,
     label: "can lineup, top-down"
   },
-  {
-    slug: "#",
-    title: "Big Blanket Co.",
-    role: "Brand System",
-    year: "2024",
-    summary: "Editorial + e-comm system for a DTC home brand growing into retail.",
-    tint: 4,
-    label: "lifestyle photography"
-  },
+
   {
     slug: "#",
     title: "LAC Branding",
@@ -58,12 +52,14 @@ const FEATURED = [
   }
 ];
 
+/* ─── Hero ─── */
+
 function Hero() {
   return (
-    <section className="hero" style={{ paddingTop: 96, paddingBottom: 120, position: "relative", overflow: "hidden" }}>
+    <section className="hero">
       <window.ParticleCanvas />
-      <div className="container" style={{ position: "relative", zIndex: 1 }}>
-        
+      <div className="container hero__layer">
+
         <h1 className="display h-xxl" style={{ margin: 0 }}>
           <span className="h1-line-wrap">
             <span className="h1-line" style={{ animationDelay: "200ms" }}>Hola, I'm Michael, a</span>
@@ -78,10 +74,10 @@ function Hero() {
             <span className="h1-line" style={{ animationDelay: "710ms" }}>based out of <span className="h1-playfair hero-gradient">the Midwest.</span></span>
           </span>
         </h1>
-        <div className="hero-enter hero-cta-row" style={{ marginTop: 56, animationDelay: "950ms" }}>
+        <div className="hero-enter hero-cta-row" style={{ animationDelay: "950ms" }}>
           <div aria-hidden="true" />
-          <p style={{ fontSize: "1rem", lineHeight: 1.45, color: "var(--ink-2)", margin: 0, maxWidth: 520 }}>
-            I'm currently leading experience design at <span style={{ color: "var(--ink)" }}>TechStack</span> and <span style={{ color: "var(--ink)" }}>TierOne</span>. I bring a over a decade of experience transforming brands, creating digital products, and making people feel something when they use them.
+          <p className="hero__intro">
+            I'm currently leading experience design at <span className="hero__highlight">TechStack</span> and <span className="hero__highlight">TierOne</span>. I bring a over a decade of experience transforming brands, creating digital products, and making people feel something when they use them.
           </p>
         </div>
       </div>
@@ -89,34 +85,26 @@ function Hero() {
   );
 }
 
+/* ─── MarqueeStrip ─── */
+
 function MarqueeStrip() {
   const items = ["Product Design", "Brand Identity", "Storytelling", "Art Direction", "Brand Strategy", "Design Systems"];
   const list = [...items, ...items, ...items];
   return (
-    <div style={{
-      borderTop: "1px solid var(--line)",
-      borderBottom: "1px solid var(--line)",
-      overflow: "hidden",
-      padding: "20px 0"
-    }}>
-      <div className="marquee" style={{
-        display: "flex", gap: 48, whiteSpace: "nowrap",
-        animation: "marq var(--marquee-duration) linear infinite",
-        fontFamily: "var(--font-mono)", fontSize: "0.75rem",
-        letterSpacing: "0.14em", textTransform: "uppercase",
-        color: "var(--ink-2)"
-      }}>
+    <div className="marquee-strip">
+      <div className="marquee marquee-strip__inner">
         {list.map((t, i) => (
-          <span key={i} style={{ display: "inline-flex", alignItems: "center", gap: 48 }}>
+          <span key={i} className="marquee-strip__item">
             <span>{t}</span>
-            <span style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--accent)" }}></span>
+            <span className="marquee-strip__dot"></span>
           </span>
         ))}
       </div>
-      <style>{`@keyframes marq { from { transform: translate3d(0,0,0); } to { transform: translate3d(-33.33%,0,0); } }`}</style>
     </div>
   );
 }
+
+/* ─── FeaturedCard ─── */
 
 function FeaturedCard({ p, index }) {
   const isBig = p.big;
@@ -124,18 +112,11 @@ function FeaturedCard({ p, index }) {
     <a
       href={p.slug}
       className={`reveal featured-card${isBig ? " featured-card--big" : ""}`}
-      style={{
-        gridColumn: isBig ? "1 / -1" : "auto",
-        transition: "transform 600ms cubic-bezier(.2,.7,.2,1)",
-      }}
     >
       <div className="featured-card__top">
         <div className="featured-card__titleline">
           <span className="featured-card__index">{String(index + 1).padStart(2, "0")}</span>
-          <h3
-            className="display"
-            style={{ margin: 0 }}
-          >
+          <h3 className="display">
             {p.title}
           </h3>
         </div>
@@ -154,9 +135,11 @@ function FeaturedCard({ p, index }) {
   );
 }
 
+/* ─── Featured ─── */
+
 function Featured() {
   return (
-    <section style={{ paddingTop: 120, paddingBottom: 40 }}>
+    <section className="home-featured">
       <div className="container">
         <div className="featured-grid">
           {FEATURED.map((p, i) => <FeaturedCard key={p.title} p={p} index={i} />)}
@@ -166,17 +149,18 @@ function Featured() {
   );
 }
 
+/* ─── StickyAbout ─── */
+
 function StickyAbout() {
   return (
-    <section style={{ paddingTop: 160, paddingBottom: 60 }}>
+    <section className="home-about">
       <div className="container">
         <div className="about-intro-grid">
           <div className="sticky-label reveal">
-            
-            <span style={{ color: "var(--ink)", display: "block", marginTop: 8, fontSize: "0.75rem" }}>(02 / About)</span>
+            <span className="sticky-label__sub">(02 / About)</span>
           </div>
           <div>
-            <p className="display reveal" style={{ fontSize: "clamp(1.75rem, 3.4vw, 2.75rem)", lineHeight: 1.15, margin: 0 }}>
+            <p className="display home-about__lead reveal">
               I've spent 15 years in the seam between <em className="accent-playfair">brand</em> and <em className="accent-playfair">product</em>, crafting
               design systems that survive contact with engineering, and product UX that respects the brand it's wearing.
             </p>
@@ -189,11 +173,11 @@ function StickyAbout() {
                   decoding="async"
                 />
               </div>
-              <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-                <p style={{ margin: 0, color: "var(--ink-2)", fontSize: "1.0625rem", lineHeight: 1.6 }}>
+              <div className="home-about__text-col">
+                <p className="home-about__copy">
                 My first real love was designing physical spaces, learning how light, materials, and spatial sequence shape the way people feel and move through the world (aka architecture). That knowledge was at the foundation of who I have become as a designer for the past 15+ years.
                 </p>
-                <a href="about.html" className="pill" style={{ alignSelf: "flex-start", marginTop: 32 }}>
+                <a href="about.html" className="pill home-about__more">
                   Read the longer version <span className="arrow">↗</span>
                 </a>
               </div>
@@ -205,22 +189,17 @@ function StickyAbout() {
   );
 }
 
+/* ─── ClientsRow ─── */
+
 function ClientsRow() {
   const clients = ["Mountaire Farms", "Assemblies of God", "Unilever", "Stok Coffee", "Danone", "Mother's Brewery", "Big Blanket", "Bass Pro"];
   return (
-    <section style={{ paddingTop: 160, paddingBottom: 80 }}>
+    <section className="home-clients">
       <div className="container">
-        <div className="eyebrow reveal" style={{ marginBottom: 32 }}>Selected clients — past + present</div>
+        <div className="eyebrow reveal">Selected clients — past + present</div>
         <div className="reveal clients-grid">
-          {clients.map((c, i) => (
-            <div key={c} style={{
-              padding: "32px 20px",
-              borderBottom: "1px solid var(--line)",
-              borderRight: (i + 1) % 4 !== 0 ? "1px solid var(--line)" : "none",
-              fontFamily: "var(--font-display)",
-              fontSize: "1.375rem",
-              color: "var(--ink-2)"
-            }}>
+          {clients.map((c) => (
+            <div key={c} className="client-cell">
               {c}
             </div>
           ))}
@@ -229,6 +208,8 @@ function ClientsRow() {
     </section>
   );
 }
+
+/* ─── Home (root component) ─── */
 
 function Home() {
   window.useReveal();

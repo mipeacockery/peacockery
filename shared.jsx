@@ -1,6 +1,8 @@
 /* Shared building blocks for Peacockery pages.
    Exported to window so each page script can use them. */
 
+/* ─── Site helpers ─── */
+
 const NAV_LINKS = [
   { href: "work.html", label: "Work", key: "work" },
   { href: "about.html", label: "About", key: "about" },
@@ -12,6 +14,8 @@ function siteHref(relPath) {
   const base = typeof window !== "undefined" && window.__PEACOCKERY_BASE != null ? window.__PEACOCKERY_BASE : "";
   return base + relPath;
 }
+
+/* ─── Footer icon components ─── */
 
 /* Footer social marks — Lucide (ISC) for LinkedIn + Dribbble; Spotify mark from Simple Icons (CC0) */
 function FooterIconLinkedIn() {
@@ -63,6 +67,8 @@ function FooterIconSpotify() {
     </svg>
   );
 }
+
+/* ─── CursorBoot ─── */
 
 function CursorBoot() {
   React.useEffect(() => {
@@ -121,6 +127,8 @@ function CursorBoot() {
   return null;
 }
 
+/* ─── ThemeBoot / ThemeToggle ─── */
+
 function ThemeBoot() {
   React.useEffect(() => {
     const t = localStorage.getItem("peacockery-theme") || "dark";
@@ -176,6 +184,8 @@ function ThemeToggle() {
     </button>
   );
 }
+
+/* ─── Nav ─── */
 
 function Nav({ active }) {
   const onHome = active === "index";
@@ -254,10 +264,12 @@ function Nav({ active }) {
   );
 }
 
+/* ─── ElsewhereLinks ─── */
+
 function ElsewhereLinks() {
   return (
     <>
-      <div className="eyebrow" style={{ marginBottom: 14 }}>Elsewhere</div>
+      <div className="eyebrow elsewhere__eyebrow">Elsewhere</div>
       <a className="footer-link" href="https://www.linkedin.com/in/peacockery/">
         <span className="footer-link__start">
           <FooterIconLinkedIn />
@@ -283,14 +295,16 @@ function ElsewhereLinks() {
   );
 }
 
+/* ─── Footer ─── */
+
 function Footer() {
   return (
     <footer className="footer">
       <div className="container">
         <div className="footer-grid">
           <div>
-            <div className="eyebrow" style={{ marginBottom: 18 }}>Let's make something</div>
-            <div className="display h-l" style={{ marginBottom: 18 }}>
+            <div className="eyebrow footer__cta-label">Let's make something</div>
+            <div className="display h-l footer__cta-headline">
               Get in touch
             </div>
             <a href="mailto:hello@peacockery.co" className="pill solid">
@@ -311,9 +325,11 @@ function Footer() {
   );
 }
 
+/* ─── Placeholder ─── */
+
 function Placeholder({ label, kind, tint = 1, ratio = "16 / 10", style }) {
   return (
-    <div className={`placeholder tinted-${tint}`} style={{ aspectRatio: ratio, width: "100%", ...style }}>
+    <div className={`placeholder tinted-${tint}`} style={{ aspectRatio: ratio, ...style }}>
       <div className="ph-label">
         <span className="ph-dot"></span>
         <span>{kind || "image"}</span>
@@ -323,6 +339,8 @@ function Placeholder({ label, kind, tint = 1, ratio = "16 / 10", style }) {
     </div>
   );
 }
+
+/* ─── ParticleCanvas ─── */
 
 /** Interactive dot grid background — used by homepage and Contact hero */
 function ParticleCanvas() {
@@ -448,18 +466,12 @@ function ParticleCanvas() {
   return (
     <canvas
       ref={canvasRef}
-      style={{
-        position: "absolute",
-        inset: 0,
-        width: "100%",
-        height: "100%",
-        display: "block",
-        pointerEvents: "none",
-        opacity: 0.5,
-      }}
+      className="particle-canvas"
     />
   );
 }
+
+/* ─── useReveal ─── */
 
 function useReveal() {
   React.useEffect(() => {

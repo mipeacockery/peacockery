@@ -1,5 +1,7 @@
 /* About page */
 
+/* ─── Data ─── */
+
 const NOW = [
   {
     label: "I'm listening to",
@@ -43,16 +45,18 @@ const PRINCIPLES = [
   { n: "04", t: "Make the second draft, fast.", d: "First drafts are too precious to learn from. The second one is where the work actually starts." },
 ];
 
+/* ─── AboutHero ─── */
+
 function AboutHero() {
   return (
-    <section style={{ paddingTop: 96, paddingBottom: 0 }}>
+    <section className="about-hero-section">
       <div className="container">
-        <div className="eyebrow reveal" style={{ marginBottom: 28 }}>About / Michael Peacock</div>
+        <div className="eyebrow reveal">About / Michael Peacock</div>
         <div className="reveal about-hero-grid">
-          <p style={{ fontSize: "1.1875rem", lineHeight: 1.55, color: "var(--ink-2)", margin: 0 }}>
+          <p className="about-hero__body">
             I grew up in Mexico, spent formative years in Florida and Texas, and came to Missouri for college, where I studied both architecture and fine arts at Drury University before ever working on a screen professionally. That path shapes how I work: a spatial, systems-level way of thinking about how people experience things, whether that's a building, a brand, or a product.
           </p>
-          <p className="about-hero-col about-hero-col--offset" style={{ fontSize: "1.1875rem", lineHeight: 1.55, color: "var(--ink-2)", margin: 0 }}>
+          <p className="about-hero__body about-hero-col about-hero-col--offset">
             For the past decade I've led design at agencies, SaaS companies, and startups, working across brand identity, UX, and design systems, and increasingly into live code. Peacockery is where I take on work that calls for craft, clarity, and a real point of view.
           </p>
         </div>
@@ -71,30 +75,24 @@ function AboutHero() {
   );
 }
 
+/* ─── Principles ─── */
+
 function Principles() {
   return (
-    <section style={{ paddingTop: 120, paddingBottom: 60 }}>
+    <section className="page-section">
       <div className="container">
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 80, alignItems: "start" }}>
+        <div className="page-two-col">
           <div className="sticky-label reveal">
             How I work<br />
-            <span style={{ color: "var(--ink)", display: "block", marginTop: 8, fontSize: "0.75rem" }}>(Principles)</span>
+            <span className="sticky-label__sub">(Principles)</span>
           </div>
           <div>
             {PRINCIPLES.map((p) => (
-              <div key={p.n} className="reveal" style={{
-                display: "grid",
-                gridTemplateColumns: "60px 1fr",
-                gap: 32,
-                padding: "40px 0",
-                borderBottom: "1px solid var(--line)"
-              }}>
-                <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.75rem", color: "var(--muted)", letterSpacing: "0.1em" }}>
-                  {p.n}
-                </div>
+              <div key={p.n} className="reveal principle-row">
+                <div className="principle-row__num">{p.n}</div>
                 <div>
-                  <h3 className="display" style={{ fontSize: "clamp(1.5rem, 2.4vw, 2rem)", margin: "0 0 14px" }}>{p.t}</h3>
-                  <p style={{ margin: 0, color: "var(--ink-2)", fontSize: "1.0625rem", lineHeight: 1.6, maxWidth: "60ch" }}>{p.d}</p>
+                  <h3 className="display principle-row__title">{p.t}</h3>
+                  <p className="principle-row__body">{p.d}</p>
                 </div>
               </div>
             ))}
@@ -105,14 +103,16 @@ function Principles() {
   );
 }
 
+/* ─── Timeline ─── */
+
 function Timeline() {
   return (
-    <section style={{ paddingTop: 120, paddingBottom: 60 }}>
+    <section className="page-section">
       <div className="container">
         <div className="about-experience-grid">
           <div className="sticky-label reveal">
             Working back<br />
-            <span style={{ color: "var(--ink)", display: "block", marginTop: 8, fontSize: "0.75rem" }}>(Experience)</span>
+            <span className="sticky-label__sub">(Experience)</span>
           </div>
           <div>
             {TIMELINE.map((t, i) => (
@@ -132,18 +132,20 @@ function Timeline() {
   );
 }
 
+/* ─── Aside ─── */
+
 function Aside() {
   return (
-    <section style={{ paddingTop: 160, paddingBottom: 60 }}>
+    <section className="page-section--inset about-aside">
       <div className="container">
-        <div className="reveal" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64 }}>
+        <div className="reveal about-aside-grid">
           <window.Placeholder label="studio shelf" kind="photo" tint={1} ratio="4 / 5" />
           <div>
-            <div className="eyebrow" style={{ marginBottom: 18 }}>Off the clock</div>
-            <h2 className="display h-l" style={{ margin: "0 0 24px" }}>
+            <div className="eyebrow">Off the clock</div>
+            <h2 className="display h-l about-aside__title">
               Letterpress, bad fishing, <em>good coffee</em>.
             </h2>
-            <p style={{ color: "var(--ink-2)", fontSize: "1.0625rem", lineHeight: 1.6, margin: 0 }}>
+            <p className="about-aside__body">
               I keep a small letterpress in the garage and a cabinet of wood type that's older than I am.
               Most weekends end in a misregistered print taped above my desk. The misalignment is, I'm told,
               part of the charm.
@@ -154,6 +156,8 @@ function Aside() {
     </section>
   );
 }
+
+/* ─── NowThumb ─── */
 
 function NowThumb({ src, alt }) {
   const [failed, setFailed] = React.useState(false);
@@ -174,9 +178,11 @@ function NowThumb({ src, alt }) {
   );
 }
 
+/* ─── NowSection ─── */
+
 function NowSection() {
   return (
-    <section style={{ paddingTop: 120, paddingBottom: 60 }}>
+    <section className="page-section">
       <div className="container">
         <div className="now-grid reveal">
           {NOW.map((item) => (
@@ -203,6 +209,8 @@ function NowSection() {
   );
 }
 
+/* ─── SkillsSection ─── */
+
 function SkillsSection() {
   const left = [
     "Product Design",
@@ -225,9 +233,9 @@ function SkillsSection() {
   ];
 
   return (
-    <section style={{ paddingTop: 120, paddingBottom: 60 }}>
+    <section className="page-section skills-section">
       <div className="container">
-        <div className="eyebrow reveal" style={{ marginBottom: 32 }}>Skills</div>
+        <div className="eyebrow reveal">Skills</div>
         <div className="skills-grid reveal">
           {Array.from({ length: Math.max(left.length, right.length) }).map((_, row) => (
             <React.Fragment key={row}>
@@ -244,6 +252,8 @@ function SkillsSection() {
     </section>
   );
 }
+
+/* ─── About (root component) ─── */
 
 function About() {
   window.useReveal();

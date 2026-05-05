@@ -1,5 +1,7 @@
 /* Work index page */
 
+/* ─── Data ─── */
+
 const ALL_WORK = [
   { slug: "projects/omg-commerce.html", t: "OMG Commerce", c: ["Web", "Brand"], y: "2025", role: "Lead Designer", tint: 1 },
   { slug: "projects/bible-engagement-project.html", t: "Bible Engagement Project", c: ["App", "Product"], y: "2024", role: "Lead Designer", tint: 3 },
@@ -18,17 +20,21 @@ const ALL_WORK = [
 
 const FILTERS = ["All", "Brand", "Web", "App", "Packaging", "Campaign"];
 
+/* ─── WorkHero ─── */
+
 function WorkHero() {
   return (
-    <section style={{ paddingTop: 96, paddingBottom: 60 }}>
+    <section className="work-hero">
       <div className="container">
-        <h1 className="display h-xl reveal" style={{ margin: 0, maxWidth: "14ch" }}>
+        <h1 className="display h-xl work-hero__headline reveal">
           Selected works
         </h1>
       </div>
     </section>
   );
 }
+
+/* ─── WorkList ─── */
 
 function WorkList() {
   const [filter, setFilter] = React.useState("All");
@@ -45,23 +51,27 @@ function WorkList() {
   }, [filter]);
 
   return (
-    <section style={{ paddingTop: 40, paddingBottom: 80 }}>
+    <section className="work-list-section">
       <div className="container">
-        <div className="reveal" style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 48, paddingBottom: 24, borderBottom: "1px solid var(--line)" }}>
+        <div className="reveal work-filters">
           {FILTERS.map(f => (
-            <button key={f} className="tag" onClick={() => setFilter(f)} style={{
-              background: filter === f ? "var(--ink)" : "transparent",
-              color: filter === f ? "var(--bg)" : "var(--ink-2)",
-              borderColor: filter === f ? "var(--ink)" : "var(--line)",
-              cursor: "pointer", transition: "all 200ms"
-            }}>{f}</button>
+            <button
+              key={f}
+              className={`tag${filter === f ? " tag--active" : ""}`}
+              onClick={() => setFilter(f)}
+              style={{
+                background: filter === f ? "var(--ink)" : "transparent",
+                color: filter === f ? "var(--bg)" : "var(--ink-2)",
+                borderColor: filter === f ? "var(--ink)" : "var(--line)",
+              }}
+            >{f}</button>
           ))}
-          <span style={{ marginLeft: "auto", fontFamily: "var(--font-mono)", fontSize: "0.6875rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--muted)", alignSelf: "center" }}>
+          <span className="work-list__count">
             {filtered.length} of {ALL_WORK.length}
           </span>
         </div>
 
-        <div style={{ position: "relative" }}>
+        <div className="work-list__wrap">
           {filtered.map((w, i) => (
             <a
               href={w.slug} key={w.t}
@@ -69,7 +79,6 @@ function WorkList() {
               onMouseEnter={() => setHover(i)}
               onMouseLeave={() => setHover(null)}
               style={{
-                borderTop: i === 0 ? "1px solid var(--line)" : "none",
                 background: hover === i ? "color-mix(in oklab, var(--ink) 4%, transparent)" : "transparent"
               }}>
               <span className="work-list__item">
@@ -85,16 +94,7 @@ function WorkList() {
           ))}
 
           {hover !== null && (
-            <div style={{
-              position: "fixed",
-              right: 80,
-              top: "30%",
-              width: 320,
-              pointerEvents: "none",
-              zIndex: 30,
-              transition: "opacity 200ms",
-              opacity: 1
-            }}>
+            <div className="work-preview">
               <window.Placeholder label={filtered[hover].t} kind="preview" tint={filtered[hover].tint} ratio="4 / 3" />
             </div>
           )}
@@ -103,6 +103,8 @@ function WorkList() {
     </section>
   );
 }
+
+/* ─── Work (root component) ─── */
 
 function Work() {
   window.useReveal();
