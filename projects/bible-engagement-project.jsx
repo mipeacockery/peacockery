@@ -144,7 +144,7 @@ function NextProject() {
   return (
     <section style={{ paddingTop: 160, paddingBottom: 80 }}>
       <div className="container">
-        <a href="omg-commerce.html" className="reveal" style={{ display: "block" }}>
+        <a href="./omg-commerce.html" className="reveal" style={{ display: "block" }}>
           <div className="eyebrow" style={{ marginBottom: 24 }}>Next project</div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48, alignItems: "center" }}>
             <h2 className="display" style={{ fontSize: "clamp(3rem, 7vw, 6rem)", margin: 0, lineHeight: 0.95 }}>

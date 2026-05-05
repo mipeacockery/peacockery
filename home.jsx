@@ -2,7 +2,7 @@
 
 const FEATURED = [
   {
-    slug: "projects/omg-commerce.html",
+    slug: "projects/bible-engagement-project.html",
     title: "Bible Engagement Project",
     role: "Brand + Web",
     year: "2025",

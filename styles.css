@@ -11,7 +11,7 @@
   --line: #d9d1c0;
   --accent: #2947CE;
   --accent-soft: #4461de;
-  --marquee-duration: 36s;
+  --marquee-duration: 12s;
 
   /* Type direction: editorial serif + sans (default) */
   --font-display: "Source Serif 4", "Source Serif Pro", "Iowan Old Style", Georgia, "Times New Roman", serif;
