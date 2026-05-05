@@ -80,7 +80,7 @@ function Hero() {
         </h1>
         <div className="hero-enter hero-cta-row" style={{ marginTop: 56, animationDelay: "950ms" }}>
           <div aria-hidden="true" />
-          <p style={{ fontSize: "1.5rem", lineHeight: 1.45, color: "var(--ink-2)", margin: 0, maxWidth: 520 }}>
+          <p style={{ fontSize: "1rem", lineHeight: 1.45, color: "var(--ink-2)", margin: 0, maxWidth: 520 }}>
             I'm currently leading experience design at <span style={{ color: "var(--ink)" }}>TechStack</span> and <span style={{ color: "var(--ink)" }}>TierOne</span>. I bring a over a decade of experience transforming brands, creating digital products, and making people feel something when they use them.
           </p>
         </div>
@@ -99,9 +99,9 @@ function MarqueeStrip() {
       overflow: "hidden",
       padding: "20px 0"
     }}>
-      <div style={{
+      <div className="marquee" style={{
         display: "flex", gap: 48, whiteSpace: "nowrap",
-        animation: "marq 36s linear infinite",
+        animation: "marq var(--marquee-duration) linear infinite",
         fontFamily: "var(--font-mono)", fontSize: "0.75rem",
         letterSpacing: "0.14em", textTransform: "uppercase",
         color: "var(--ink-2)"
@@ -113,7 +113,7 @@ function MarqueeStrip() {
           </span>
         ))}
       </div>
-      <style>{`@keyframes marq { from { transform: translateX(0); } to { transform: translateX(-33.33%); } }`}</style>
+      <style>{`@keyframes marq { from { transform: translate3d(0,0,0); } to { transform: translate3d(-33.33%,0,0); } }`}</style>
     </div>
   );
 }
@@ -123,7 +123,7 @@ function FeaturedCard({ p, index }) {
   return (
     <a
       href={p.slug}
-      className="reveal featured-card"
+      className={`reveal featured-card${isBig ? " featured-card--big" : ""}`}
       style={{
         gridColumn: isBig ? "1 / -1" : "auto",
         transition: "transform 600ms cubic-bezier(.2,.7,.2,1)",
@@ -134,7 +134,7 @@ function FeaturedCard({ p, index }) {
           <span className="featured-card__index">{String(index + 1).padStart(2, "0")}</span>
           <h3
             className="display"
-            style={{ fontSize: isBig ? "clamp(2.5rem, 5vw, 4.5rem)" : "clamp(1.75rem, 3vw, 2.5rem)", margin: 0 }}
+            style={{ margin: 0 }}
           >
             {p.title}
           </h3>

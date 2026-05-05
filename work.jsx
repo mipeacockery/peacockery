@@ -65,32 +65,21 @@ function WorkList() {
           {filtered.map((w, i) => (
             <a
               href={w.slug} key={w.t}
-              className="reveal"
+              className="reveal work-list__link"
               onMouseEnter={() => setHover(i)}
               onMouseLeave={() => setHover(null)}
               style={{
-                display: "grid",
-                gridTemplateColumns: "60px 1fr 1.5fr 200px 80px",
-                gap: 32,
-                padding: "32px 12px",
-                borderBottom: "1px solid var(--line)",
                 borderTop: i === 0 ? "1px solid var(--line)" : "none",
-                alignItems: "center",
-                transition: "background 240ms, padding 240ms",
                 background: hover === i ? "color-mix(in oklab, var(--ink) 4%, transparent)" : "transparent"
               }}>
-              <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.75rem", color: "var(--muted)", letterSpacing: "0.1em" }}>
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <span className="display" style={{ fontSize: "clamp(1.5rem, 2.6vw, 2.25rem)" }}>{w.t}</span>
-              <span style={{ color: "var(--ink-2)", fontFamily: "var(--font-mono)", fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase" }}>
+              <span className="work-list__item">
+                <span className="work-list__title display">{w.t}</span>
+                <span className="work-list__tags">
                 {w.c.join(" · ")}
-              </span>
-              <span style={{ color: "var(--muted)", fontFamily: "var(--font-mono)", fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase" }}>
+                </span>
+                <span className="work-list__role">
                 {w.role}
-              </span>
-              <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.75rem", color: "var(--ink-2)", letterSpacing: "0.08em", textAlign: "right" }}>
-                {w.y} →
+                </span>
               </span>
             </a>
           ))}
