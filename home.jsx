@@ -170,7 +170,7 @@ function StickyAbout() {
   return (
     <section style={{ paddingTop: 160, paddingBottom: 60 }}>
       <div className="container">
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 80, alignItems: "start" }}>
+        <div className="about-intro-grid">
           <div className="sticky-label reveal">
             
             <span style={{ color: "var(--ink)", display: "block", marginTop: 8, fontSize: "0.75rem" }}>(02 / About)</span>
@@ -180,7 +180,7 @@ function StickyAbout() {
               I've spent 15 years in the seam between <em className="accent-playfair">brand</em> and <em className="accent-playfair">product</em>, crafting
               design systems that survive contact with engineering, and product UX that respects the brand it's wearing.
             </p>
-            <div className="reveal" style={{ marginTop: 56, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48 }}>
+            <div className="reveal about-portrait-grid">
               <div className="thumb thumb--portrait">
                 <img
                   src="assets/me-laughing-bw.png"
@@ -211,11 +211,7 @@ function ClientsRow() {
     <section style={{ paddingTop: 160, paddingBottom: 80 }}>
       <div className="container">
         <div className="eyebrow reveal" style={{ marginBottom: 32 }}>Selected clients — past + present</div>
-        <div className="reveal" style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(4, 1fr)",
-          borderTop: "1px solid var(--line)"
-        }}>
+        <div className="reveal clients-grid">
           {clients.map((c, i) => (
             <div key={c} style={{
               padding: "32px 20px",

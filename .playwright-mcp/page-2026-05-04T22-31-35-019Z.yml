@@ -1,0 +1,204 @@
+- generic [ref=e2]:
+  - navigation [ref=e3]:
+    - generic [ref=e4]:
+      - link "Peacockery" [ref=e5] [cursor=pointer]:
+        - /url: index.html
+        - img [ref=e6]
+      - generic [ref=e17]:
+        - link "Work" [ref=e18] [cursor=pointer]:
+          - /url: work.html
+        - link "About" [ref=e19] [cursor=pointer]:
+          - /url: about.html
+        - link "Contact" [ref=e20] [cursor=pointer]:
+          - /url: contact.html
+        - button "Switch to light mode" [ref=e21] [cursor=pointer]:
+          - generic [ref=e22]:
+            - generic:
+              - img
+            - generic:
+              - img
+  - generic [ref=e25]:
+    - heading "Hola, I'm Michael, a product designer & creative director currently based out of the Midwest." [level=1] [ref=e26]:
+      - generic [ref=e28]: Hola, I'm Michael, a
+      - generic [ref=e30]: product designer &
+      - generic [ref=e32]: creative director currently
+      - generic [ref=e34]: based out of the Midwest.
+    - paragraph [ref=e36]: I'm currently leading experience design at TechStack and TierOne. I bring a over a decade of experience transforming brands, creating digital products, and making people feel something when they use them.
+  - generic [ref=e38]:
+    - generic [ref=e40]: Product Design
+    - generic [ref=e43]: Brand Identity
+    - generic [ref=e46]: Storytelling
+    - generic [ref=e49]: Art Direction
+    - generic [ref=e52]: Brand Strategy
+    - generic [ref=e55]: Design Systems
+    - generic [ref=e58]: Product Design
+    - generic [ref=e61]: Brand Identity
+    - generic [ref=e64]: Storytelling
+    - generic [ref=e67]: Art Direction
+    - generic [ref=e70]: Brand Strategy
+    - generic [ref=e73]: Design Systems
+    - generic [ref=e76]: Product Design
+    - generic [ref=e79]: Brand Identity
+    - generic [ref=e82]: Storytelling
+    - generic [ref=e85]: Art Direction
+    - generic [ref=e88]: Brand Strategy
+    - generic [ref=e91]: Design Systems
+  - generic [ref=e95]:
+    - link "01 Bible Engagement Project Brand + Web · 2025 project — agency homepage hero Reimagining the agency's digital storefront for a new chapter of Amazon and Google Ads expertise. View case →" [ref=e96] [cursor=pointer]:
+      - /url: projects/omg-commerce.html
+      - generic [ref=e97]:
+        - generic [ref=e98]:
+          - generic [ref=e99]: "01"
+          - heading "Bible Engagement Project" [level=3] [ref=e100]
+        - generic [ref=e101]: Brand + Web · 2025
+      - generic [ref=e103]:
+        - generic [ref=e105]: project
+        - generic [ref=e106]: —
+        - generic [ref=e107]: agency homepage hero
+      - generic [ref=e108]:
+        - paragraph [ref=e109]: Reimagining the agency's digital storefront for a new chapter of Amazon and Google Ads expertise.
+        - generic [ref=e110]:
+          - text: View case
+          - generic [ref=e111]: →
+    - link "02 OMG Commerce Brand + Web · 2025 project — agency homepage hero Reimagining the agency's digital storefront for a new chapter of Amazon and Google Ads expertise. View case →" [ref=e112] [cursor=pointer]:
+      - /url: projects/omg-commerce.html
+      - generic [ref=e113]:
+        - generic [ref=e114]:
+          - generic [ref=e115]: "02"
+          - heading "OMG Commerce" [level=3] [ref=e116]
+        - generic [ref=e117]: Brand + Web · 2025
+      - generic [ref=e119]:
+        - generic [ref=e121]: project
+        - generic [ref=e122]: —
+        - generic [ref=e123]: agency homepage hero
+      - generic [ref=e124]:
+        - paragraph [ref=e125]: Reimagining the agency's digital storefront for a new chapter of Amazon and Google Ads expertise.
+        - generic [ref=e126]:
+          - text: View case
+          - generic [ref=e127]: →
+    - link "03 Juxly Product UX · 2024 project — ipad health dashboard An EHR-integrated medical app the floor staff actually wants to open. View case →" [ref=e128] [cursor=pointer]:
+      - /url: "#"
+      - generic [ref=e129]:
+        - generic [ref=e130]:
+          - generic [ref=e131]: "03"
+          - heading "Juxly" [level=3] [ref=e132]
+        - generic [ref=e133]: Product UX · 2024
+      - generic [ref=e135]:
+        - generic [ref=e137]: project
+        - generic [ref=e138]: —
+        - generic [ref=e139]: ipad health dashboard
+      - generic [ref=e140]:
+        - paragraph [ref=e141]: An EHR-integrated medical app the floor staff actually wants to open.
+        - generic [ref=e142]:
+          - text: View case
+          - generic [ref=e143]: →
+    - link "04 Mother's Brewery Identity + Packaging · 2023 project — can lineup, top-down A 30-can refresh anchored on a hand-set wordmark and Ozark-blue field. View case →" [ref=e144] [cursor=pointer]:
+      - /url: "#"
+      - generic [ref=e145]:
+        - generic [ref=e146]:
+          - generic [ref=e147]: "04"
+          - heading "Mother's Brewery" [level=3] [ref=e148]
+        - generic [ref=e149]: Identity + Packaging · 2023
+      - generic [ref=e151]:
+        - generic [ref=e153]: project
+        - generic [ref=e154]: —
+        - generic [ref=e155]: can lineup, top-down
+      - generic [ref=e156]:
+        - paragraph [ref=e157]: A 30-can refresh anchored on a hand-set wordmark and Ozark-blue field.
+        - generic [ref=e158]:
+          - text: View case
+          - generic [ref=e159]: →
+    - link "05 Big Blanket Co. Brand System · 2024 project — lifestyle photography Editorial + e-comm system for a DTC home brand growing into retail. View case →" [ref=e160] [cursor=pointer]:
+      - /url: "#"
+      - generic [ref=e161]:
+        - generic [ref=e162]:
+          - generic [ref=e163]: "05"
+          - heading "Big Blanket Co." [level=3] [ref=e164]
+        - generic [ref=e165]: Brand System · 2024
+      - generic [ref=e167]:
+        - generic [ref=e169]: project
+        - generic [ref=e170]: —
+        - generic [ref=e171]: lifestyle photography
+      - generic [ref=e172]:
+        - paragraph [ref=e173]: Editorial + e-comm system for a DTC home brand growing into retail.
+        - generic [ref=e174]:
+          - text: View case
+          - generic [ref=e175]: →
+    - link "06 LAC Branding Brand · 2023 project — brand deck spread Identity refresh and guidelines for a logistics collective outgrowing its clip-art era. View case →" [ref=e176] [cursor=pointer]:
+      - /url: "#"
+      - generic [ref=e177]:
+        - generic [ref=e178]:
+          - generic [ref=e179]: "06"
+          - heading "LAC Branding" [level=3] [ref=e180]
+        - generic [ref=e181]: Brand · 2023
+      - generic [ref=e183]:
+        - generic [ref=e185]: project
+        - generic [ref=e186]: —
+        - generic [ref=e187]: brand deck spread
+      - generic [ref=e188]:
+        - paragraph [ref=e189]: Identity refresh and guidelines for a logistics collective outgrowing its clip-art era.
+        - generic [ref=e190]:
+          - text: View case
+          - generic [ref=e191]: →
+  - generic [ref=e194]:
+    - generic [ref=e196]: (02 / About)
+    - generic [ref=e197]:
+      - paragraph [ref=e198]:
+        - text: I've spent 15 years in the seam between
+        - emphasis [ref=e199]: brand
+        - text: and
+        - emphasis [ref=e200]: product
+        - text: ", crafting design systems that survive contact with engineering, and product UX that respects the brand it's wearing."
+      - generic [ref=e201]:
+        - img "Portrait of Michael Peacock laughing." [ref=e203]
+        - generic [ref=e204]:
+          - paragraph [ref=e205]: My first real love was designing physical spaces, learning how light, materials, and spatial sequence shape the way people feel and move through the world (aka architecture). That knowledge was at the foundation of who I have become as a designer for the past 15+ years.
+          - link "Read the longer version ↗" [ref=e206] [cursor=pointer]:
+            - /url: about.html
+            - text: Read the longer version
+            - generic [ref=e207]: ↗
+  - generic [ref=e209]:
+    - generic [ref=e210]: Selected clients — past + present
+    - generic [ref=e211]:
+      - generic [ref=e212]: Mountaire Farms
+      - generic [ref=e213]: Assemblies of God
+      - generic [ref=e214]: Unilever
+      - generic [ref=e215]: Stok Coffee
+      - generic [ref=e216]: Danone
+      - generic [ref=e217]: Mother's Brewery
+      - generic [ref=e218]: Big Blanket
+      - generic [ref=e219]: Bass Pro
+  - contentinfo [ref=e220]:
+    - generic [ref=e221]:
+      - generic [ref=e222]:
+        - generic [ref=e223]:
+          - generic [ref=e224]: Let's make something
+          - generic [ref=e225]: Get in touch
+          - link "hello@peacockery.co ↗" [ref=e226] [cursor=pointer]:
+            - /url: mailto:hello@peacockery.co
+            - text: hello@peacockery.co
+            - generic [ref=e227]: ↗
+        - generic [ref=e228]:
+          - generic [ref=e229]: Elsewhere
+          - link "LinkedIn ↗" [ref=e230] [cursor=pointer]:
+            - /url: https://www.linkedin.com/in/peacockery/
+            - generic [ref=e231]:
+              - img [ref=e232]
+              - generic [ref=e236]: LinkedIn
+            - generic [ref=e237]: ↗
+          - link "Dribbble ↗" [ref=e238] [cursor=pointer]:
+            - /url: https://dribbble.com/Peacockery
+            - generic [ref=e239]:
+              - img [ref=e240]
+              - generic [ref=e245]: Dribbble
+            - generic [ref=e246]: ↗
+          - link "Spotify ↗" [ref=e247] [cursor=pointer]:
+            - /url: https://open.spotify.com/user/1244262106?si=a91f3588f90b48f0
+            - generic [ref=e248]:
+              - img [ref=e249]
+              - generic [ref=e251]: Spotify
+            - generic [ref=e252]: ↗
+      - generic [ref=e253]:
+        - generic [ref=e254]: © 2026 Michael Peacock
+        - generic [ref=e255]: Made in Springfield, MO
+        - generic [ref=e256]: v 4.0 — 2026

@@ -105,6 +105,7 @@ body {
   text-rendering: optimizeLegibility;
   font-feature-settings: "ss01", "kern";
   transition: background 320ms ease, color 320ms ease;
+  overflow-x: clip;
 }
 ::selection { background: var(--accent); color: var(--bg); }
 
@@ -116,7 +117,7 @@ button { font-family: inherit; font-size: 1em; cursor: pointer; }
 .container { max-width: var(--max); margin: 0 auto; padding-left: var(--gutter); padding-right: var(--gutter); }
 .eyebrow {
   font-family: var(--font-mono);
-  font-size: 0.6471em;
+  font-size: 0.75rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ink);
@@ -172,7 +173,9 @@ button { font-family: inherit; font-size: 1em; cursor: pointer; }
   text-transform: uppercase;
 }
 .nav-logo {
-  display: block;
+  display: flex;
+  align-items: center;
+  min-height: 48px;
   line-height: 0;
   flex-shrink: 0;
 }
@@ -182,16 +185,17 @@ button { font-family: inherit; font-size: 1em; cursor: pointer; }
   width: auto;
   max-width: min(100%, 9.5rem);
 }
-.nav-links { display: flex; gap: 28px; align-items: center; }
-.nav-links a { color: var(--ink-2); transition: color 200ms; }
+.nav-links { display: flex; gap: 28px; align-items: stretch; align-self: stretch; }
+.nav-links a { display: flex; align-items: center; min-height: 48px; color: var(--ink-2); transition: color 200ms; }
 .nav-links a:hover, .nav-links a.active { color: var(--ink); }
 .nav-links a.active { position: relative; }
 .nav-links a.active::after {
-  content: ""; position: absolute; left: 0; right: 0; bottom: -22px;
+  content: ""; position: absolute; left: 0; right: 0; bottom: -1px;
   height: 1px; background: var(--accent);
 }
 .theme-toggle {
   background: transparent; border: none; padding: 0; cursor: pointer;
+  display: flex; align-items: center;
 }
 .theme-toggle__track {
   position: relative; display: flex; align-items: center;
@@ -236,7 +240,7 @@ button { font-family: inherit; font-size: 1em; cursor: pointer; }
 }
 .footer-link {
   display: flex; justify-content: space-between; align-items: center;
-  padding: 14px 0; border-bottom: 1px solid var(--line);
+  padding: 16px 0; border-bottom: 1px solid var(--line);
   font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.08em;
   text-transform: uppercase; color: var(--ink-2);
   transition: color 200ms, padding-left 240ms;
@@ -495,6 +499,27 @@ button { font-family: inherit; font-size: 1em; cursor: pointer; }
   align-items: end;
 }
 
+/* About section grids */
+.about-intro-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 80px;
+  align-items: start;
+}
+.about-portrait-grid {
+  margin-top: 56px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+}
+
+/* Clients grid */
+.clients-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--line);
+}
+
 /* Featured work — grid tracks can shrink; card flex rows wrap on narrow viewports */
 .featured-grid {
   display: grid;
@@ -708,7 +733,7 @@ button { font-family: inherit; font-size: 1em; cursor: pointer; }
     padding-top: 32px;
   }
   .footer-grid { grid-template-columns: 1fr; gap: 32px; }
-  .nav-links { gap: 16px; font-size: 0.6875rem; }
+  .nav-links { gap: 16px; }
   .nav:not(.nav--home) .nav-links a:not(.active):not(.theme-toggle) { display: none; }
   .hero-cta-row { grid-template-columns: 1fr; gap: 24px; }
   .hero-cta-buttons { justify-content: flex-start !important; }
@@ -732,4 +757,21 @@ button { font-family: inherit; font-size: 1em; cursor: pointer; }
   .skills-cell:nth-child(odd) {
     border-right: none;
   }
+  .about-intro-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .about-portrait-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-top: 40px;
+  }
+  .clients-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-logo-svg { height: 0.875rem; }
+  .nav-links { gap: 4px; }
 }
