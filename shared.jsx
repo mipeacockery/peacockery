@@ -131,15 +131,26 @@ function CursorBoot() {
       cursor.style.height = "";
     }
 
+    function setCustomActive(active) {
+      document.body.classList.toggle("cursor-custom-active", active);
+    }
+
+    function deactivate() {
+      cursor.classList.remove("cursor--hover");
+      clearTextMode();
+      setCustomActive(false);
+    }
+
     const onMove = (e) => {
       const x = e.clientX;
       const y = e.clientY;
-      cursor.style.left = x + "px";
 
       if (e.target.closest(HOVER)) {
+        cursor.style.left = x + "px";
+        cursor.style.top = y + "px";
         cursor.classList.add("cursor--hover");
         clearTextMode();
-        cursor.style.top = y + "px";
+        setCustomActive(true);
         return;
       }
 
@@ -148,20 +159,22 @@ function CursorBoot() {
       const tEl = e.target.closest(TEXT);
       if (tEl) {
         const fontSize = fontSizeAt(x, y, tEl);
-        cursor.classList.add("cursor--text");
+        cursor.style.left = x + "px";
         cursor.style.height = fontSize + "px";
         cursor.style.top = lineCenterY(x, y, tEl, fontSize) + "px";
+        cursor.classList.add("cursor--text");
+        setCustomActive(true);
         return;
       }
 
-      clearTextMode();
-      cursor.style.top = y + "px";
+      deactivate();
     };
 
     document.addEventListener("mousemove", onMove);
 
     return () => {
       document.removeEventListener("mousemove", onMove);
+      document.body.classList.remove("cursor-custom-active");
       cursor.remove();
     };
   }, []);

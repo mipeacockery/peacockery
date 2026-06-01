@@ -8,7 +8,6 @@ const FEATURED = [
     title: "Bible Engagement Project",
     role: "Brand + Web",
     year: "2025",
-    summary: "Reimagining the agency's digital storefront for a new chapter of Amazon and Google Ads expertise.",
     tint: 1,
     label: "agency homepage hero",
     big: true
@@ -18,7 +17,6 @@ const FEATURED = [
     title: "OMG Commerce",
     role: "Brand + Web",
     year: "2025",
-    summary: "Reimagining the agency's digital storefront for a new chapter of Amazon and Google Ads expertise.",
     tint: 1,
     label: "agency homepage hero",
   },
@@ -27,7 +25,6 @@ const FEATURED = [
     title: "Juxly",
     role: "Product UX",
     year: "2024",
-    summary: "An EHR-integrated medical app the floor staff actually wants to open.",
     tint: 6,
     label: "ipad health dashboard"
   },
@@ -36,7 +33,6 @@ const FEATURED = [
     title: "Mother's Brewery",
     role: "Identity + Packaging",
     year: "2023",
-    summary: "A 30-can refresh anchored on a hand-set wordmark and Ozark-blue field.",
     tint: 5,
     label: "can lineup, top-down"
   },
@@ -46,7 +42,6 @@ const FEATURED = [
     title: "LAC Branding",
     role: "Brand",
     year: "2023",
-    summary: "Identity refresh and guidelines for a logistics collective outgrowing its clip-art era.",
     tint: 3,
     label: "brand deck spread"
   }
@@ -106,6 +101,10 @@ function MarqueeStrip() {
 
 /* ─── FeaturedCard ─── */
 
+function featuredTags(role) {
+  return role.split(/\s*\+\s*/).map((t) => t.trim()).filter(Boolean);
+}
+
 function FeaturedCard({ p, index }) {
   const isBig = p.big;
   return (
@@ -120,17 +119,13 @@ function FeaturedCard({ p, index }) {
             {p.title}
           </h3>
         </div>
-        <div className="featured-card__meta">
-          {p.role} · {p.year}
+        <div className="featured-card__tags">
+          {featuredTags(p.role).map((tag) => (
+            <span key={tag} className="featured-card__tag">{tag}</span>
+          ))}
         </div>
       </div>
       <window.Placeholder label={p.label} kind="project" tint={p.tint} ratio={isBig ? "16 / 8" : "4 / 3"} />
-      <div className="featured-card__foot">
-        <p className="featured-card__summary">{p.summary}</p>
-        <span className="featured-card__cta">
-          View case <span className="featured-card__cta-arrow">→</span>
-        </span>
-      </div>
     </a>
   );
 }
