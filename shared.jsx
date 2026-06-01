@@ -9,6 +9,25 @@ const NAV_LINKS = [
   { href: "contact.html", label: "Contact", key: "contact" },
 ];
 
+/** Stagger between nav pills (left → right). */
+const NAV_PILL_STAGGER_MS = 90;
+/** Default pages: pills begin shortly after the logo fade. */
+const NAV_PILLS_BASE_MS = 320;
+/** Home: after last hero line (710ms + 1400ms) plus a short pause. */
+const NAV_HOME_PILLS_BASE_MS = 2240;
+const NAV_PILL_ANIM_MS = 650;
+
+function navPillDelay(index, onHome) {
+  const base = onHome ? NAV_HOME_PILLS_BASE_MS : NAV_PILLS_BASE_MS;
+  return base + index * NAV_PILL_STAGGER_MS;
+}
+
+function navPillsSequenceEndMs(onHome) {
+  const base = onHome ? NAV_HOME_PILLS_BASE_MS : NAV_PILLS_BASE_MS;
+  const lastIndex = NAV_LINKS.length - 1;
+  return base + lastIndex * NAV_PILL_STAGGER_MS + NAV_PILL_ANIM_MS;
+}
+
 /** Prefix for internal .html links when a page lives under e.g. projects/ (set window.__PEACOCKERY_BASE in that page's HTML). */
 function siteHref(relPath) {
   const base = typeof window !== "undefined" && window.__PEACOCKERY_BASE != null ? window.__PEACOCKERY_BASE : "";
@@ -239,17 +258,90 @@ function ThemeToggle() {
   );
 }
 
+/* ─── Nav pill frost (fixed layers — backdrop-filter fails inside sticky/animated trees) ─── */
+
+function NavPillFrost({ pillsRef, onHome }) {
+  const [rects, setRects] = React.useState([]);
+
+  React.useEffect(() => {
+    const pillsEl = pillsRef.current;
+    if (!pillsEl) return;
+
+    let raf = 0;
+    const measure = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const pills = pillsEl.querySelectorAll(".nav-pill");
+        setRects(
+          [...pills].map((pill, index) => {
+            const r = pill.getBoundingClientRect();
+            return {
+              top: r.top,
+              left: r.left,
+              width: r.width,
+              height: r.height,
+              active: pill.classList.contains("nav-pill--active"),
+              delayMs: navPillDelay(index, onHome),
+            };
+          })
+        );
+      });
+    };
+
+    measure();
+    window.addEventListener("scroll", measure, { passive: true });
+    window.addEventListener("resize", measure);
+    const ro = new ResizeObserver(measure);
+    ro.observe(pillsEl);
+    const t1 = setTimeout(measure, 150);
+    const t2 = setTimeout(measure, navPillsSequenceEndMs(onHome) + 80);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", measure);
+      window.removeEventListener("resize", measure);
+      ro.disconnect();
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
+  }, [pillsRef, onHome]);
+
+  if (!rects.length) return null;
+
+  return ReactDOM.createPortal(
+    <div className="nav-pill-frost-layer" aria-hidden="true">
+      {rects.map((r, i) => (
+        <div
+          key={i}
+          className={`nav-pill-frost${r.active ? " nav-pill-frost--active" : ""}`}
+          style={{
+            top: `${r.top}px`,
+            left: `${r.left}px`,
+            width: `${r.width}px`,
+            height: `${r.height}px`,
+            animationDelay: `${r.delayMs}ms`,
+          }}
+        />
+      ))}
+    </div>,
+    document.body
+  );
+}
+
 /* ─── Nav ─── */
 
 function Nav({ active }) {
   const onHome = active === "index";
+  const pillsRef = React.useRef(null);
+  const themeToggleDelayMs =
+    navPillDelay(NAV_LINKS.length - 1, onHome) + NAV_PILL_STAGGER_MS + 40;
   return (
     <>
     <CursorBoot />
     <nav className={onHome ? "nav nav--home" : "nav"}>
       <div className="container nav-inner">
         <a
-          href={siteHref("index.html")}
+          href={siteHref("/")}
           className="nav-logo"
           aria-current={onHome ? "page" : undefined}
           aria-label="Peacockery"
@@ -305,15 +397,28 @@ function Nav({ active }) {
           </svg>
         </a>
         <div className="nav-links">
-          {NAV_LINKS.map((l) => (
-            <a key={l.key} href={siteHref(l.href)} className={active === l.key ? "active" : ""}>
-              {l.label}
-            </a>
-          ))}
-          <ThemeToggle />
+          <div className="nav-pills" ref={pillsRef} role="list">
+            {NAV_LINKS.map((l, i) => (
+              <a
+                key={l.key}
+                href={siteHref(l.href)}
+                className={`nav-pill nav-pill-enter${active === l.key ? " nav-pill--active" : ""}`}
+                role="listitem"
+                aria-current={active === l.key ? "page" : undefined}
+                style={{ animationDelay: `${navPillDelay(i, onHome)}ms` }}
+              >
+                {l.label}
+              </a>
+            ))}
+          </div>
+          <div className="theme-toggle-wrap" style={{ animationDelay: `${themeToggleDelayMs}ms` }}>
+            <ThemeToggle />
+          </div>
         </div>
       </div>
     </nav>
+    {!onHome && <div className="nav-spacer" aria-hidden="true" />}
+    <NavPillFrost pillsRef={pillsRef} onHome={onHome} />
     </>
   );
 }
@@ -376,6 +481,503 @@ function Footer() {
         </div>
       </div>
     </footer>
+  );
+}
+
+/* ─── LiquidThumbnail (WebGL water ripples — Framer Ripple–style) ─── */
+/* https://www.framer.com/marketplace/components/ripple/ */
+
+const LIQUID_TINT_BG = {
+  1: "#e8d8c5",
+  2: "#d6cab6",
+  3: "#2a2826",
+  4: "#c4a98a",
+  5: "#b6491f",
+  6: "#5e6b56",
+};
+
+const RIPPLE_MAX = 10;
+const RIPPLE_LIFE = 3.6;
+const RIPPLE_SPEED = 0.42;
+const RIPPLE_SPAWN_DIST = 0.04;
+const RIPPLE_SPAWN_MS = 70;
+const RIPPLE_STRENGTH = 0.04;
+
+const LIQUID_VS = `
+  attribute vec2 aPosition;
+  attribute vec2 aUv;
+  varying vec2 vUv;
+  void main() {
+    vUv = aUv;
+    gl_Position = vec4(aPosition, 0.0, 1.0);
+  }
+`;
+
+const LIQUID_FS = `
+  precision mediump float;
+  varying vec2 vUv;
+  uniform sampler2D uTexture;
+  uniform float uTime;
+  uniform float uIntensity;
+  uniform vec3 uRipples[${RIPPLE_MAX}];
+
+  vec2 rippleDisplacement(vec2 uv, vec2 origin, float birth) {
+    float age = uTime - birth;
+    if (age < 0.0 || age > ${RIPPLE_LIFE.toFixed(1)}) return vec2(0.0);
+
+    vec2 d = uv - origin;
+    float dist = length(d);
+    if (dist < 0.0002) return vec2(0.0);
+
+    float radius = age * ${RIPPLE_SPEED.toFixed(2)};
+    float life = 1.0 - age / ${RIPPLE_LIFE.toFixed(1)};
+    float fade = life * life * exp(-age * 1.35);
+    float ring = sin((dist - radius) * 50.0);
+    float crest = exp(-pow((dist - radius) * 16.0, 2.0));
+    float spread = exp(-dist * 5.0);
+    float amp = ring * crest * fade * spread * uIntensity;
+
+    return normalize(d) * amp;
+  }
+
+  void main() {
+    vec2 uv = vec2(vUv.x, 1.0 - vUv.y);
+    vec2 disp = vec2(0.0);
+
+    for (int i = 0; i < ${RIPPLE_MAX}; i++) {
+      vec3 r = uRipples[i];
+      if (r.z >= 0.0) {
+        disp += rippleDisplacement(uv, r.xy, r.z);
+      }
+    }
+
+    uv += disp * ${RIPPLE_STRENGTH.toFixed(3)};
+    gl_FragColor = texture2D(uTexture, uv);
+  }
+`;
+
+function createRipplePool() {
+  return {
+    ripples: [],
+    lastSpawnX: 0.5,
+    lastSpawnY: 0.5,
+    lastSpawnAt: 0,
+  };
+}
+
+function pruneRipples(pool, now) {
+  pool.ripples = pool.ripples.filter((r) => now - r.t < RIPPLE_LIFE);
+  while (pool.ripples.length > RIPPLE_MAX) pool.ripples.shift();
+}
+
+function spawnRipple(pool, x, y, now, force = false) {
+  const dx = x - pool.lastSpawnX;
+  const dy = y - pool.lastSpawnY;
+  const dist = Math.hypot(dx, dy);
+  const elapsed = (now - pool.lastSpawnAt) * 1000;
+
+  if (!force && dist < RIPPLE_SPAWN_DIST && elapsed < RIPPLE_SPAWN_MS) return;
+
+  pool.ripples.push({ x, y, t: now });
+  pool.lastSpawnX = x;
+  pool.lastSpawnY = y;
+  pool.lastSpawnAt = now;
+  pruneRipples(pool, now);
+}
+
+function clearRipplePool(pool) {
+  pool.ripples = [];
+  pool.lastSpawnX = 0.5;
+  pool.lastSpawnY = 0.5;
+  pool.lastSpawnAt = 0;
+}
+
+function ripplesAreActive(pool, now) {
+  return pool.ripples.some((r) => now - r.t < RIPPLE_LIFE - 0.05);
+}
+
+function drawPlaceholderTexture(canvas, tint) {
+  const ctx = canvas.getContext("2d");
+  const w = canvas.width;
+  const h = canvas.height;
+  const bg = LIQUID_TINT_BG[tint] || LIQUID_TINT_BG[1];
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, w, h);
+  ctx.save();
+  ctx.strokeStyle = "rgba(0,0,0,0.05)";
+  ctx.lineWidth = 1;
+  const span = Math.hypot(w, h);
+  ctx.translate(w / 2, h / 2);
+  ctx.rotate(-Math.PI / 4);
+  for (let x = -span; x < span; x += 14) {
+    ctx.beginPath();
+    ctx.moveTo(x, -span);
+    ctx.lineTo(x, span);
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+function createLiquidGl(canvas) {
+  const gl = canvas.getContext("webgl", { alpha: true, premultipliedAlpha: false, antialias: false });
+  if (!gl) return null;
+
+  function compile(type, source) {
+    const shader = gl.createShader(type);
+    gl.shaderSource(shader, source);
+    gl.compileShader(shader);
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+      gl.deleteShader(shader);
+      return null;
+    }
+    return shader;
+  }
+
+  const vs = compile(gl.VERTEX_SHADER, LIQUID_VS);
+  const fs = compile(gl.FRAGMENT_SHADER, LIQUID_FS);
+  if (!vs || !fs) return null;
+
+  const program = gl.createProgram();
+  gl.attachShader(program, vs);
+  gl.attachShader(program, fs);
+  gl.linkProgram(program);
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return null;
+
+  const positions = new Float32Array([
+    -1, -1, 0, 0,
+    1, -1, 1, 0,
+    -1, 1, 0, 1,
+    1, 1, 1, 1,
+  ]);
+  const buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
+
+  const aPosition = gl.getAttribLocation(program, "aPosition");
+  const aUv = gl.getAttribLocation(program, "aUv");
+  const uTexture = gl.getUniformLocation(program, "uTexture");
+  const uTime = gl.getUniformLocation(program, "uTime");
+  const uIntensity = gl.getUniformLocation(program, "uIntensity");
+  const uRippleLocs = [];
+  for (let i = 0; i < RIPPLE_MAX; i++) {
+    uRippleLocs.push(gl.getUniformLocation(program, `uRipples[${i}]`));
+  }
+
+  const texture = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+
+  return {
+    gl,
+    program,
+    buffer,
+    aPosition,
+    aUv,
+    uTexture,
+    uTime,
+    uIntensity,
+    uRippleLocs,
+    texture,
+  };
+}
+
+function uploadLiquidTexture(glState, source) {
+  const { gl, texture } = glState;
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, source);
+}
+
+function drawLiquidFrame(glState, width, height, pool, time, intensity) {
+  const {
+    gl, program, buffer, aPosition, aUv, uTexture, uTime, uIntensity, uRippleLocs, texture,
+  } = glState;
+  gl.viewport(0, 0, width, height);
+  gl.clearColor(0, 0, 0, 0);
+  gl.clear(gl.COLOR_BUFFER_BIT);
+  gl.useProgram(program);
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.enableVertexAttribArray(aPosition);
+  gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 16, 0);
+  gl.enableVertexAttribArray(aUv);
+  gl.vertexAttribPointer(aUv, 2, gl.FLOAT, false, 16, 8);
+
+  gl.activeTexture(gl.TEXTURE0);
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+  gl.uniform1i(uTexture, 0);
+  gl.uniform1f(uTime, time);
+  gl.uniform1f(uIntensity, intensity);
+
+  for (let i = 0; i < RIPPLE_MAX; i++) {
+    const r = pool.ripples[i];
+    if (r && uRippleLocs[i]) {
+      gl.uniform3f(uRippleLocs[i], r.x, r.y, r.t);
+    } else if (uRippleLocs[i]) {
+      gl.uniform3f(uRippleLocs[i], 0, 0, -1);
+    }
+  }
+
+  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+}
+
+/**
+ * Featured / work thumbnails — water ripples on hover (Framer Ripple–style).
+ * Pass `src` for a photo, or `tint` alone for placeholder-style blocks.
+ */
+function LiquidThumbnail({
+  ratio = "16 / 10",
+  src,
+  srcSet,
+  alt = "",
+  tint = 1,
+  objectPosition = "center center",
+  interactive = true,
+  className = "",
+  style,
+}) {
+  const wrapRef = React.useRef(null);
+  const canvasRef = React.useRef(null);
+  const imgRef = React.useRef(null);
+  const glStateRef = React.useRef(null);
+  const rafRef = React.useRef(null);
+  const poolRef = React.useRef(createRipplePool());
+  const pointerRef = React.useRef({ x: 0.5, y: 0.5 });
+  const hoveringRef = React.useRef(false);
+  const timeRef = React.useRef(0);
+  const sizeRef = React.useRef({ w: 0, h: 0 });
+  const [fallback, setFallback] = React.useState(!interactive);
+
+  React.useEffect(() => {
+    const wrap = wrapRef.current;
+    const canvas = canvasRef.current;
+    if (!wrap || !canvas || !interactive) return;
+
+    const prefersReduced = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+    if (prefersReduced) {
+      setFallback(true);
+      return;
+    }
+
+    const glState = createLiquidGl(canvas);
+    if (!glState) {
+      setFallback(true);
+      return;
+    }
+    glStateRef.current = glState;
+
+    const offscreen = document.createElement("canvas");
+    let disposed = false;
+
+    function resize() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const w = Math.max(1, Math.floor(wrap.clientWidth * dpr));
+      const h = Math.max(1, Math.floor(wrap.clientHeight * dpr));
+      if (w === sizeRef.current.w && h === sizeRef.current.h) return;
+      sizeRef.current = { w, h };
+      canvas.width = w;
+      canvas.height = h;
+      canvas.style.width = "100%";
+      canvas.style.height = "100%";
+
+      if (src && imgRef.current?.complete && imgRef.current.naturalWidth) {
+        uploadLiquidTexture(glState, imgRef.current);
+      } else if (!src) {
+        offscreen.width = w;
+        offscreen.height = h;
+        drawPlaceholderTexture(offscreen, tint);
+        uploadLiquidTexture(glState, offscreen);
+      }
+    }
+
+    function paintTexture() {
+      if (disposed) return;
+      if (src && imgRef.current?.complete && imgRef.current.naturalWidth) {
+        uploadLiquidTexture(glState, imgRef.current);
+      } else if (!src) {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        offscreen.width = Math.max(1, Math.floor(wrap.clientWidth * dpr));
+        offscreen.height = Math.max(1, Math.floor(wrap.clientHeight * dpr));
+        drawPlaceholderTexture(offscreen, tint);
+        uploadLiquidTexture(glState, offscreen);
+      }
+      resize();
+    }
+
+    const ro = new ResizeObserver(() => {
+      resize();
+      paintTexture();
+    });
+    ro.observe(wrap);
+    resize();
+
+    function setPointer(e) {
+      const rect = wrap.getBoundingClientRect();
+      pointerRef.current.x = (e.clientX - rect.left) / rect.width;
+      pointerRef.current.y = (e.clientY - rect.top) / rect.height;
+    }
+
+    function onMove(e) {
+      setPointer(e);
+      if (hoveringRef.current) {
+        spawnRipple(poolRef.current, pointerRef.current.x, pointerRef.current.y, timeRef.current);
+      }
+      kick();
+    }
+    function onEnter(e) {
+      hoveringRef.current = true;
+      const pt = e.touches?.[0] || e;
+      setPointer(pt);
+      spawnRipple(poolRef.current, pointerRef.current.x, pointerRef.current.y, timeRef.current, true);
+      kick();
+    }
+    function onLeave() {
+      hoveringRef.current = false;
+      kick();
+    }
+
+    wrap.addEventListener("mousemove", onMove);
+    wrap.addEventListener("mouseenter", onEnter);
+    wrap.addEventListener("mouseleave", onLeave);
+
+    let last = performance.now();
+
+    function renderFrame() {
+      const { w, h } = sizeRef.current;
+      if (w > 0 && h > 0) {
+        const t = timeRef.current;
+        const intensity =
+          hoveringRef.current || ripplesAreActive(poolRef.current, t) ? 1 : 0;
+        drawLiquidFrame(glState, w, h, poolRef.current, t, intensity);
+      }
+    }
+
+    function tick(now) {
+      if (disposed) return;
+      const t = now / 1000;
+      timeRef.current = t;
+      pruneRipples(poolRef.current, t);
+
+      renderFrame();
+
+      const settling = hoveringRef.current || ripplesAreActive(poolRef.current, t);
+
+      if (settling) {
+        rafRef.current = requestAnimationFrame(tick);
+      } else {
+        rafRef.current = null;
+      }
+    }
+
+    function kick() {
+      if (!rafRef.current) {
+        last = performance.now();
+        rafRef.current = requestAnimationFrame(tick);
+      }
+    }
+
+    function onTouch(e) {
+      if (e.touches.length) onMove(e.touches[0]);
+    }
+
+    wrap.addEventListener("mouseenter", kick);
+    wrap.addEventListener("mousemove", kick);
+    wrap.addEventListener("touchstart", onEnter, { passive: true });
+    wrap.addEventListener("touchmove", onTouch, { passive: true });
+    wrap.addEventListener("touchend", onLeave, { passive: true });
+    wrap.addEventListener("touchcancel", onLeave, { passive: true });
+
+    renderFrame();
+
+    function onImgLoad() {
+      paintTexture();
+      renderFrame();
+    }
+
+    const img = imgRef.current;
+    if (img) {
+      if (img.complete) onImgLoad();
+      else img.addEventListener("load", onImgLoad);
+    } else {
+      paintTexture();
+      renderFrame();
+    }
+
+    return () => {
+      disposed = true;
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      ro.disconnect();
+      wrap.removeEventListener("mousemove", onMove);
+      wrap.removeEventListener("mouseenter", onEnter);
+      wrap.removeEventListener("mouseleave", onLeave);
+      wrap.removeEventListener("mouseenter", kick);
+      wrap.removeEventListener("mousemove", kick);
+      wrap.removeEventListener("touchstart", onEnter);
+      wrap.removeEventListener("touchmove", onTouch);
+      wrap.removeEventListener("touchend", onLeave);
+      wrap.removeEventListener("touchcancel", onLeave);
+      if (img) img.removeEventListener("load", onImgLoad);
+      const ext = glState.gl.getExtension("WEBGL_lose_context");
+      ext?.loseContext();
+      glStateRef.current = null;
+    };
+  }, [src, tint, interactive]);
+
+  const wrapClass = `liquid-thumb${interactive ? " liquid-thumb--interactive" : ""}${className ? ` ${className}` : ""}`;
+
+  if (fallback || !interactive) {
+    if (src) {
+      return (
+        <div className={wrapClass} style={{ aspectRatio: ratio, ...style }} ref={wrapRef}>
+          <img
+            className="liquid-thumb__fallback"
+            src={src}
+            srcSet={srcSet}
+            alt={alt}
+            loading="lazy"
+            decoding="async"
+            style={{ objectPosition }}
+          />
+        </div>
+      );
+    }
+    return (
+      <div className={wrapClass} style={{ aspectRatio: ratio, ...style }} ref={wrapRef}>
+        <div className={`placeholder tinted-${tint}`} style={{ height: "100%", aspectRatio: "auto" }}>
+          <div className="ph-label" aria-hidden="true">
+            <span className="ph-dot"></span>
+            <span>preview</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className={wrapClass}
+      style={{ aspectRatio: ratio, ...style }}
+      ref={wrapRef}
+      role={alt ? "img" : undefined}
+      aria-label={alt || undefined}
+    >
+      <canvas ref={canvasRef} className="liquid-thumb__canvas" aria-hidden="true" />
+      {src ? (
+        <img
+          ref={imgRef}
+          className="liquid-thumb__source"
+          src={src}
+          srcSet={srcSet}
+          alt={alt}
+          loading="lazy"
+          decoding="async"
+          style={{ objectPosition }}
+        />
+      ) : null}
+    </div>
   );
 }
 
@@ -550,22 +1152,104 @@ function ParticleCanvas() {
   );
 }
 
+/* ─── useFeaturedGrow ─── */
+
+function useFeaturedGrow(readyDelayMs = 0) {
+  React.useEffect(() => {
+    const rows = document.querySelectorAll(".featured-grow");
+    if (!rows.length) return;
+
+    const prefersReduced = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+    if (prefersReduced || !("IntersectionObserver" in window)) {
+      rows.forEach((row) => row.classList.add("in"));
+      return;
+    }
+
+    const STAGGER_MS = 90;
+    let homeReady = readyDelayMs <= 0;
+    const pending = new Set();
+
+    function revealRow(row) {
+      if (row.classList.contains("in")) return;
+      row.querySelectorAll(".featured-grow__cell").forEach((cell, i) => {
+        cell.style.setProperty("--grow-delay", i * STAGGER_MS + "ms");
+      });
+      row.classList.add("in");
+      pending.delete(row);
+    }
+
+    function tryReveal(row) {
+      if (!homeReady) {
+        pending.add(row);
+        return false;
+      }
+      revealRow(row);
+      return true;
+    }
+
+    const readyTimer =
+      readyDelayMs > 0
+        ? setTimeout(() => {
+            homeReady = true;
+            pending.forEach((row) => {
+              const r = row.getBoundingClientRect();
+              if (r.top < window.innerHeight && r.bottom > 0) revealRow(row);
+            });
+          }, readyDelayMs)
+        : null;
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)
+          .forEach((e) => {
+            if (tryReveal(e.target)) io.unobserve(e.target);
+          });
+      },
+      { threshold: 0.08, rootMargin: "0px 0px -5% 0px" }
+    );
+
+    rows.forEach((row) => io.observe(row));
+
+    return () => {
+      io.disconnect();
+      if (readyTimer) clearTimeout(readyTimer);
+    };
+  }, [readyDelayMs]);
+}
+
 /* ─── useReveal ─── */
 
 function useReveal() {
   React.useEffect(() => {
+    const prefersReduced = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
     const els = document.querySelectorAll(".reveal");
-    if (!("IntersectionObserver" in window)) {
+    if (prefersReduced || !("IntersectionObserver" in window)) {
       els.forEach((el) => el.classList.add("in"));
       return;
     }
+
+    const STAGGER_MS = 90;
+    const MAX_STEPS = 5;
+
     const io = new IntersectionObserver(
       (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add("in");
-            io.unobserve(e.target);
-          }
+        // Elements that cross the threshold in the same batch (e.g. a row of
+        // cards) cascade top-to-bottom, left-to-right for an intentional feel.
+        const incoming = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => {
+            const ra = a.boundingClientRect;
+            const rb = b.boundingClientRect;
+            return ra.top - rb.top || ra.left - rb.left;
+          });
+
+        incoming.forEach((e, i) => {
+          const step = Math.min(i, MAX_STEPS);
+          e.target.style.setProperty("--reveal-delay", step * STAGGER_MS + "ms");
+          e.target.classList.add("in");
+          io.unobserve(e.target);
         });
       },
       { threshold: 0.1, rootMargin: "0px 0px -60px 0px" }
@@ -583,4 +1267,4 @@ function useReveal() {
   }, []);
 }
 
-Object.assign(window, { Nav, Footer, ElsewhereLinks, ThemeBoot, ThemeToggle, Placeholder, ParticleCanvas, useReveal, NAV_LINKS, CursorBoot, siteHref });
+Object.assign(window, { Nav, Footer, ElsewhereLinks, ThemeBoot, ThemeToggle, Placeholder, LiquidThumbnail, ParticleCanvas, useReveal, useFeaturedGrow, NAV_LINKS, CursorBoot, siteHref });

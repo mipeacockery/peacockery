@@ -4,13 +4,18 @@
 
 const FEATURED = [
   {
-    slug: "projects/bible-engagement-project.html",
-    title: "Bible Engagement Project",
-    role: "Brand + Web",
+    slug: "projects/techstack.html",
+    title: "TechStack",
+    role: "Brand + Web App",
     year: "2025",
     tint: 1,
-    label: "agency homepage hero",
-    big: true
+    big: true,
+    image: {
+      src: "assets/techstack-onboarding-hero.jpg",
+      srcSet: "assets/techstack-onboarding-hero.jpg 1x, assets/techstack-onboarding-hero@2x.jpg 2x",
+      alt: "TechStack workspace dashboard showing spend and location data.",
+      objectPosition: "left center",
+    },
   },
   {
     slug: "projects/omg-commerce.html",
@@ -18,7 +23,6 @@ const FEATURED = [
     role: "Brand + Web",
     year: "2025",
     tint: 1,
-    label: "agency homepage hero",
   },
   {
     slug: "#",
@@ -26,7 +30,6 @@ const FEATURED = [
     role: "Product UX",
     year: "2024",
     tint: 6,
-    label: "ipad health dashboard"
   },
   {
     slug: "#",
@@ -34,7 +37,6 @@ const FEATURED = [
     role: "Identity + Packaging",
     year: "2023",
     tint: 5,
-    label: "can lineup, top-down"
   },
 
   {
@@ -43,8 +45,16 @@ const FEATURED = [
     role: "Brand",
     year: "2023",
     tint: 3,
-    label: "brand deck spread"
   }
+];
+
+/** First featured row waits for hero lines (710ms + 1400ms) and marquee (1150ms + 800ms). */
+const FEATURED_LOAD_START_MS = 900;
+
+const FEATURED_ROWS = [
+  [FEATURED[0]],
+  [FEATURED[1], FEATURED[2]],
+  [FEATURED[3], FEATURED[4]],
 ];
 
 /* ─── Hero ─── */
@@ -86,7 +96,7 @@ function MarqueeStrip() {
   const items = ["Product Design", "Brand Identity", "Storytelling", "Art Direction", "Brand Strategy", "Design Systems"];
   const list = [...items, ...items, ...items];
   return (
-    <div className="marquee-strip">
+    <div className="marquee-strip load-rise" style={{ animationDelay: "1150ms" }}>
       <div className="marquee marquee-strip__inner">
         {list.map((t, i) => (
           <span key={i} className="marquee-strip__item">
@@ -110,7 +120,7 @@ function FeaturedCard({ p, index }) {
   return (
     <a
       href={p.slug}
-      className={`reveal featured-card${isBig ? " featured-card--big" : ""}`}
+      className={`featured-card${isBig ? " featured-card--big" : ""}`}
     >
       <div className="featured-card__top">
         <div className="featured-card__titleline">
@@ -125,19 +135,50 @@ function FeaturedCard({ p, index }) {
           ))}
         </div>
       </div>
-      <window.Placeholder label={p.label} kind="project" tint={p.tint} ratio={isBig ? "16 / 8" : "4 / 3"} />
+      {p.image ? (
+        <window.LiquidThumbnail
+          ratio={isBig ? "16 / 8" : "4 / 3"}
+          src={p.image.src}
+          srcSet={p.image.srcSet}
+          alt={p.image.alt}
+          objectPosition={p.image.objectPosition}
+        />
+      ) : (
+        <window.LiquidThumbnail
+          ratio={isBig ? "16 / 8" : "4 / 3"}
+          tint={p.tint}
+        />
+      )}
     </a>
+  );
+}
+
+function FeaturedRow({ row, startIndex }) {
+  const isFull = row.length === 1;
+  return (
+    <div className={`featured-row featured-grow${isFull ? " featured-row--full" : ""}`}>
+      {row.map((p, i) => (
+        <div key={p.title} className="featured-grow__cell">
+          <FeaturedCard p={p} index={startIndex + i} />
+        </div>
+      ))}
+    </div>
   );
 }
 
 /* ─── Featured ─── */
 
 function Featured() {
+  let cardIndex = 0;
   return (
     <section className="home-featured">
       <div className="container">
         <div className="featured-grid">
-          {FEATURED.map((p, i) => <FeaturedCard key={p.title} p={p} index={i} />)}
+          {FEATURED_ROWS.map((row, i) => {
+            const startIndex = cardIndex;
+            cardIndex += row.length;
+            return <FeaturedRow key={i} row={row} startIndex={startIndex} />;
+          })}
         </div>
       </div>
     </section>
@@ -208,6 +249,7 @@ function ClientsRow() {
 
 function Home() {
   window.useReveal();
+  window.useFeaturedGrow(FEATURED_LOAD_START_MS);
   return (
     <>
       <window.Nav active="index" />
