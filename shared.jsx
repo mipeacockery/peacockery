@@ -397,7 +397,7 @@ function ParticleCanvas() {
     const prefersReduced = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
 
     const SPACING = 25;
-    const INFLUENCE_R = 500;
+    const INFLUENCE_R = 2000;
     const REST_FILAMENT = 16;
     const FILAMENT_EASE = 0.14;
     const ANGLE_EASE = 0.18;
