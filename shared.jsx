@@ -78,49 +78,90 @@ function CursorBoot() {
     cursor.id = "cursor";
     document.body.appendChild(cursor);
 
-    const onMove = (e) => {
-      cursor.style.left = e.clientX + "px";
-      cursor.style.top = e.clientY + "px";
-    };
-
     const TEXT = "h1, h2, h3, h4, h5, h6, p, li, dt, dd, figcaption, blockquote";
     const HOVER = "a, .featured-card";
 
-    const onOver = (e) => {
-      const hEl = e.target.closest(HOVER);
-      if (hEl) {
-        cursor.classList.add("cursor--hover");
-        cursor.classList.remove("cursor--text");
-        cursor.style.height = "";
-        return;
+    function caretAt(x, y) {
+      if (document.caretRangeFromPoint) {
+        const range = document.caretRangeFromPoint(x, y);
+        if (!range) return null;
+        const rects = range.getClientRects();
+        const rect = rects.length ? rects[0] : range.getBoundingClientRect();
+        return rect.height ? { rect, range } : null;
       }
-      const tEl = e.target.closest(TEXT);
-      if (!tEl) return;
-      const fs = parseFloat(getComputedStyle(tEl).fontSize);
-      cursor.classList.add("cursor--text");
-      cursor.style.height = fs * 1.4 + "px";
-    };
+      if (document.caretPositionFromPoint) {
+        const pos = document.caretPositionFromPoint(x, y);
+        if (!pos) return null;
+        const range = document.createRange();
+        range.setStart(pos.offsetNode, pos.offset);
+        range.collapse(true);
+        const rects = range.getClientRects();
+        const rect = rects.length ? rects[0] : range.getBoundingClientRect();
+        return rect.height ? { rect, range } : null;
+      }
+      return null;
+    }
 
-    const onOut = (e) => {
-      const hEl = e.target.closest(HOVER);
-      if (hEl) {
-        if (!hEl.contains(e.relatedTarget)) cursor.classList.remove("cursor--hover");
-        return;
+    function elementFromRange(range, root) {
+      let node = range.startContainer;
+      if (node.nodeType === Node.TEXT_NODE) node = node.parentElement;
+      return node && root.contains(node) ? node : null;
+    }
+
+    function fontSizeAt(x, y, root) {
+      const hit = caretAt(x, y);
+      const el = hit ? elementFromRange(hit.range, root) : null;
+      return parseFloat(getComputedStyle(el || root).fontSize);
+    }
+
+    function lineCenterY(x, y, root, fontSize) {
+      const hit = caretAt(x, y);
+      if (hit && elementFromRange(hit.range, root)) {
+        return hit.rect.top + hit.rect.height / 2;
       }
-      const tEl = e.target.closest(TEXT);
-      if (!tEl || tEl.contains(e.relatedTarget)) return;
+      const style = getComputedStyle(root);
+      const lh = parseFloat(style.lineHeight) || fontSize * 1.5;
+      const rect = root.getBoundingClientRect();
+      const lineIndex = Math.max(0, Math.floor((y - rect.top) / lh));
+      return rect.top + lineIndex * lh + lh / 2;
+    }
+
+    function clearTextMode() {
       cursor.classList.remove("cursor--text");
       cursor.style.height = "";
+    }
+
+    const onMove = (e) => {
+      const x = e.clientX;
+      const y = e.clientY;
+      cursor.style.left = x + "px";
+
+      if (e.target.closest(HOVER)) {
+        cursor.classList.add("cursor--hover");
+        clearTextMode();
+        cursor.style.top = y + "px";
+        return;
+      }
+
+      cursor.classList.remove("cursor--hover");
+
+      const tEl = e.target.closest(TEXT);
+      if (tEl) {
+        const fontSize = fontSizeAt(x, y, tEl);
+        cursor.classList.add("cursor--text");
+        cursor.style.height = fontSize + "px";
+        cursor.style.top = lineCenterY(x, y, tEl, fontSize) + "px";
+        return;
+      }
+
+      clearTextMode();
+      cursor.style.top = y + "px";
     };
 
     document.addEventListener("mousemove", onMove);
-    document.addEventListener("mouseover", onOver);
-    document.addEventListener("mouseout", onOut);
 
     return () => {
       document.removeEventListener("mousemove", onMove);
-      document.removeEventListener("mouseover", onOver);
-      document.removeEventListener("mouseout", onOut);
       cursor.remove();
     };
   }, []);
@@ -352,12 +393,14 @@ function ParticleCanvas() {
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
 
-    const SPACING = 12;
-    const DOT_R = 1.5;
-    const PUSH_RADIUS = 400;
-    const MAX_PUSH = 55;
-    const SPRING = 0.12;
-    const DAMP = 0.72;
+    // Respect reduced motion: keep the static dot grid only.
+    const prefersReduced = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+
+    const SPACING = 25;
+    const INFLUENCE_R = 500;
+    const REST_FILAMENT = 16;
+    const FILAMENT_EASE = 0.14;
+    const ANGLE_EASE = 0.18;
 
     let dots = [];
     let logicalW = 0, logicalH = 0;
@@ -372,10 +415,9 @@ function ParticleCanvas() {
           dots.push({
             ox: c * SPACING,
             oy: r * SPACING,
-            dx: 0,
-            dy: 0,
-            vx: 0,
-            vy: 0,
+            // Magnetic filings state
+            angle: 0,
+            filament: 0,
           });
         }
       }
@@ -405,6 +447,13 @@ function ParticleCanvas() {
     section.addEventListener("mousemove", onMove);
     section.addEventListener("mouseleave", onLeave);
 
+    function wrapAnglePi(a) {
+      // Normalize to [-PI, PI] for shortest-path interpolation.
+      a = (a + Math.PI) % (Math.PI * 2);
+      if (a < 0) a += Math.PI * 2;
+      return a - Math.PI;
+    }
+
     function draw() {
       ctx.clearRect(0, 0, logicalW, logicalH);
 
@@ -412,39 +461,56 @@ function ParticleCanvas() {
       const dotColor = isDark ? "rgba(255,253,245,0.22)" : "rgba(0,0,0,0.13)";
 
       ctx.fillStyle = dotColor;
+      ctx.strokeStyle = dotColor;
+      ctx.lineWidth = 2.5;
+      ctx.lineCap = "round";
 
       for (const d of dots) {
-        const ax = -d.dx * SPRING;
-        const ay = -d.dy * SPRING;
-
-        const px = d.ox + d.dx - mouse.x;
-        const py = d.oy + d.dy - mouse.y;
-        const dist = Math.sqrt(px * px + py * py);
-        if (dist < PUSH_RADIUS && dist > 0) {
-          const t = 1 - dist / PUSH_RADIUS;
-          const force = t * t * MAX_PUSH * 0.18;
-          d.vx += (px / dist) * force;
-          d.vy += (py / dist) * force;
-        }
-
-        d.vx = (d.vx + ax) * DAMP;
-        d.vy = (d.vy + ay) * DAMP;
-        d.dx += d.vx;
-        d.dy += d.vy;
-
-        const dispLen = Math.sqrt(d.dx * d.dx + d.dy * d.dy);
-        if (dispLen > MAX_PUSH) {
-          d.dx = (d.dx / dispLen) * MAX_PUSH;
-          d.dy = (d.dy / dispLen) * MAX_PUSH;
-        }
-
-        const x = d.ox + d.dx;
-        const y = d.oy + d.dy;
+        const x = d.ox;
+        const y = d.oy;
         if (x < -SPACING || x > logicalW + SPACING || y < -SPACING || y > logicalH + SPACING) continue;
 
+        // Single coherent "source" (like Motion's example) when not cursor-influenced.
+        const sourceX = logicalW * 0.5;
+        const sourceY = logicalH * 0.5;
+        const baseTargetAngle = Math.atan2(sourceY - y, sourceX - x);
+        const baseTargetFilament = REST_FILAMENT;
+
+        if (!prefersReduced) {
+          const mx = mouse.x;
+          const my = mouse.y;
+          const hasMouse = mx > -1000 && my > -1000;
+          if (hasMouse) {
+            const dx = mx - x;
+            const dy = my - y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist > 0 && dist < INFLUENCE_R) {
+              const targetAngle = Math.atan2(dy, dx);
+              d.filament += (baseTargetFilament - d.filament) * FILAMENT_EASE;
+              d.angle += wrapAnglePi(targetAngle - d.angle) * ANGLE_EASE;
+            } else {
+              d.filament += (baseTargetFilament - d.filament) * FILAMENT_EASE;
+              d.angle += wrapAnglePi(baseTargetAngle - d.angle) * (ANGLE_EASE * 0.6);
+            }
+          } else {
+            d.filament += (baseTargetFilament - d.filament) * FILAMENT_EASE;
+            d.angle += wrapAnglePi(baseTargetAngle - d.angle) * (ANGLE_EASE * 0.6);
+          }
+        } else {
+          // Static filings only (no cursor-driven animation).
+          d.filament = baseTargetFilament;
+          d.angle = baseTargetAngle;
+        }
+
+        // Centered filing — fixed length keeps a visible gap at the cursor.
+        const len = d.filament;
+        const hx = Math.cos(d.angle) * (len * 0.5);
+        const hy = Math.sin(d.angle) * (len * 0.5);
         ctx.beginPath();
-        ctx.arc(x, y, DOT_R, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.moveTo(x - hx, y - hy);
+        ctx.lineTo(x + hx, y + hy);
+        ctx.stroke();
       }
 
       rafRef.current = requestAnimationFrame(draw);
