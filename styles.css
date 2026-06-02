@@ -180,7 +180,15 @@ button { font-family: inherit; font-size: 1em; cursor: pointer; }
   background: transparent;
 }
 .nav--home + .hero {
-  padding-top: calc(96px + var(--nav-height));
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  padding-top: var(--nav-height);
+  padding-bottom: 120px;
+  box-sizing: border-box;
+}
+.nav--home + .hero .hero__layer {
+  width: 100%;
 }
 
 /* Nav — fixed so frost layers can sample scrolling page content */
