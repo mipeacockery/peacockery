@@ -4,7 +4,6 @@
 
 const ALL_WORK = [
   { slug: "projects/techstack.html", t: "TechStack", c: ["App", "Brand"], y: "2025", role: "Head of Product", tint: 1 },
-  { slug: "projects/omg-commerce.html", t: "OMG Commerce", c: ["Web", "Brand"], y: "2025", role: "Lead Designer", tint: 1 },
   { slug: "projects/bible-engagement-project.html", t: "Bible Engagement Project", c: ["App", "Product"], y: "2024", role: "Lead Designer", tint: 3 },
   { slug: "#", t: "Juxly Medical App", c: ["App", "UX"], y: "2024", role: "Senior PD", tint: 6 },
   { slug: "#", t: "LAC Branding", c: ["Brand"], y: "2023", role: "Art Director", tint: 4 },

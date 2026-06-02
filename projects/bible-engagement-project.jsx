@@ -42,7 +42,14 @@ function CaseImage() {
   return (
     <section style={{ paddingTop: 24, paddingBottom: 80 }}>
       <div className="container reveal">
-        <window.Placeholder label="Bible Engagement — app home / today" kind="key visual" tint={5} ratio="16 / 9" />
+        <window.LiquidThumbnail
+          className="liquid-thumb--case"
+          ratio="16 / 9"
+          interactive={false}
+          src="../assets/bible-engagement-cover.png"
+          alt="Bible Engagement app home screen with daily devotion, resources, and reading plan."
+          objectPosition="center center"
+        />
       </div>
     </section>
   );
@@ -144,13 +151,13 @@ function NextProject() {
   return (
     <section style={{ paddingTop: 160, paddingBottom: 80 }}>
       <div className="container">
-        <a href="./omg-commerce.html" className="reveal" style={{ display: "block" }}>
-          <div className="eyebrow" style={{ marginBottom: 24 }}>Next project</div>
+        <a href="../work.html" className="reveal" style={{ display: "block" }}>
+          <div className="eyebrow" style={{ marginBottom: 24 }}>More work</div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48, alignItems: "center" }}>
             <h2 className="display" style={{ fontSize: "clamp(3rem, 7vw, 6rem)", margin: 0, lineHeight: 0.95 }}>
-              OMG<br />Commerce
+              All<br />projects
             </h2>
-            <window.Placeholder label="next: OMG Commerce" kind="next" tint={1} ratio="4 / 3" />
+            <window.Placeholder label="back to work index" kind="next" tint={3} ratio="4 / 3" />
           </div>
         </a>
       </div>

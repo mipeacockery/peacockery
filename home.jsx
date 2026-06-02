@@ -18,11 +18,16 @@ const FEATURED = [
     },
   },
   {
-    slug: "projects/omg-commerce.html",
-    title: "OMG Commerce",
-    role: "Brand + Web",
-    year: "2025",
-    tint: 1,
+    slug: "projects/bible-engagement-project.html",
+    title: "Bible Engagement Project",
+    role: "App + Product",
+    year: "2024",
+    tint: 3,
+    image: {
+      src: "assets/bible-engagement-cover.png",
+      alt: "Bible Engagement app home screen with daily devotion, resources, and reading plan.",
+      objectPosition: "center center",
+    },
   },
   {
     slug: "#",
